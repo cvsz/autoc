@@ -70,6 +70,47 @@ class AppTests(unittest.TestCase):
         self.assertTrue(body.startswith("data: "))
         self.assertIn("\n\n", body)
 
+    def test_health_endpoint_reports_loaded_slots(self) -> None:
+        env_path = self.write_env(
+            "\n".join(
+                [
+                    "GOOGLE_ID_01=one@example.com",
+                    "GOOGLE_API_KEY=key-one",
+                ]
+            )
+        )
+        model = ReloadingCountdownModel(env_path, 60)
+        handler = DummyHandler(model, "/healthz")
+
+        handler.do_GET()
+
+        body = handler.wfile.getvalue().decode("utf-8")
+        self.assertEqual(200, handler.status)
+        self.assertIn('"status":"ok"', body)
+        self.assertIn('"slot_count":1', body)
+        self.assertIn(("X-Content-Type-Options", "nosniff"), handler.headers)
+
+    def test_dashboard_contains_status_controls(self) -> None:
+        env_path = self.write_env(
+            "\n".join(
+                [
+                    "GOOGLE_ID_01=one@example.com",
+                    "GOOGLE_API_KEY=key-one",
+                ]
+            )
+        )
+        model = ReloadingCountdownModel(env_path, 60)
+        handler = DummyHandler(model, "/")
+
+        handler.do_GET()
+
+        body = handler.wfile.getvalue().decode("utf-8")
+        self.assertEqual(200, handler.status)
+        self.assertIn("connection-badge", body)
+        self.assertIn("theme-toggle", body)
+        self.assertIn("slot-filter", body)
+        self.assertIn("/events", body)
+
 
 if __name__ == "__main__":
     unittest.main()

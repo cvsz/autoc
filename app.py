@@ -77,6 +77,69 @@ HTML_TEMPLATE = r"""<!doctype html>
       letter-spacing: 0.02em;
       font-size: 0.88rem;
     }
+    body[data-theme="light"] {
+      --bg0: #eef4f3;
+      --bg1: #dbe8e8;
+      --panel: rgba(255, 255, 255, 0.86);
+      --panel-border: rgba(15, 35, 40, 0.12);
+      --text: #17252a;
+      --muted: #5b6c72;
+      --shadow: 0 20px 70px rgba(28, 62, 68, 0.18);
+    }
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 11px;
+      color: var(--text);
+      font-family: var(--mono);
+    }
+    .brand-mark {
+      display: grid;
+      place-items: center;
+      width: 34px;
+      height: 34px;
+      border-radius: 12px;
+      color: #10181b;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      font-weight: 900;
+    }
+    .brand strong { display: block; font-size: 0.98rem; }
+    .brand small { display: block; color: var(--muted); font-size: 0.68rem; margin-top: 2px; }
+    .header-actions { display: flex; align-items: center; gap: 9px; }
+    .icon-button {
+      border: 1px solid var(--panel-border);
+      border-radius: 12px;
+      padding: 8px 10px;
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.06);
+      cursor: pointer;
+      font: 700 0.76rem var(--mono);
+      transition: transform 160ms ease, background 160ms ease, border-color 160ms ease;
+    }
+    .icon-button:hover, .icon-button:focus-visible { transform: translateY(-1px); border-color: var(--accent); background: rgba(240, 161, 75, 0.14); }
+    .icon-button:focus-visible, .filter-input:focus-visible { outline: 3px solid rgba(127, 209, 185, 0.45); outline-offset: 2px; }
+    .connection-badge { min-width: 124px; justify-content: center; }
+    .connection-badge.offline .dot { background: var(--danger); box-shadow: 0 0 0 6px rgba(255, 107, 107, 0.08); }
+    .connection-badge.syncing .dot { background: var(--accent); box-shadow: 0 0 0 6px rgba(240, 161, 75, 0.08); }
+    .hero-copy { display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; }
+    .eyebrow { margin: 0 0 10px; color: var(--accent-2); font: 700 0.74rem var(--mono); letter-spacing: 0.14em; text-transform: uppercase; }
+    .hero-copy p { max-width: 520px; margin: 0; color: var(--muted); font: 0.98rem/1.55 var(--mono); }
+    .hero-badge { flex: 0 0 auto; padding: 9px 12px; border: 1px solid rgba(127, 209, 185, 0.25); border-radius: 14px; color: var(--accent-2); background: rgba(127, 209, 185, 0.08); font: 700 0.76rem var(--mono); }
+    .countdown-caption { margin: 26px 0 0; color: var(--muted); font: 700 0.76rem var(--mono); letter-spacing: 0.13em; text-transform: uppercase; }
+    .live-meta { display: flex; flex-wrap: wrap; gap: 8px 18px; margin-top: 12px; color: var(--muted); font: 0.75rem var(--mono); }
+    .live-meta span { display: inline-flex; align-items: center; gap: 6px; }
+    .live-meta strong { color: var(--text); font-weight: 700; }
+    .panel-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
+    .panel-heading h2 { margin: 0; }
+    .slot-count { color: var(--muted); font: 700 0.72rem var(--mono); }
+    .slot-toolbar { display: flex; gap: 8px; margin-bottom: 12px; }
+    .filter-input { width: 100%; border: 1px solid var(--panel-border); border-radius: 11px; padding: 10px 11px; color: var(--text); background: rgba(255, 255, 255, 0.06); font: 0.78rem var(--mono); }
+    .filter-input::placeholder { color: var(--muted); }
+    .slot-status { color: var(--accent-2); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; }
+    .empty-state { padding: 18px 8px; color: var(--muted); text-align: center; font: 0.8rem/1.45 var(--mono); }
+    .hint { margin: 10px 0 0; color: var(--muted); font: 0.72rem/1.45 var(--mono); }
+    .hint kbd { padding: 2px 5px; border: 1px solid var(--panel-border); border-radius: 5px; color: var(--text); background: rgba(255,255,255,0.08); }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; } }
     .badge {
       display: inline-flex;
       align-items: center;
@@ -221,6 +284,8 @@ HTML_TEMPLATE = r"""<!doctype html>
       .shell { padding: 10px; }
       .card { border-radius: 22px; }
       .topbar { flex-direction: column; }
+      .header-actions { justify-content: space-between; flex-wrap: wrap; }
+      .hero-copy { flex-direction: column; }
       .meta { grid-template-columns: 1fr; }
       .hero, .side { padding: 18px; }
       .countdown { letter-spacing: -0.05em; }
@@ -231,15 +296,31 @@ HTML_TEMPLATE = r"""<!doctype html>
   <div class="shell">
     <main class="card" id="card">
       <div class="topbar">
-        <div class="badge" id="status-badge"><span class="dot"></span><span id="status-text">loading</span></div>
-        <div>Realtime monitor countdown</div>
-        <div id="clock-label"></div>
+        <div class="brand"><span class="brand-mark">G</span><span><strong>ggtmoni</strong><small>rotation control room</small></span></div>
+        <div class="header-actions">
+          <div class="badge connection-badge syncing" id="status-badge" aria-live="polite"><span class="dot"></span><span id="status-text">connecting</span></div>
+          <button class="icon-button" id="refresh-button" type="button" title="Refresh state (R)">↻ Refresh</button>
+          <button class="icon-button" id="theme-toggle" type="button" title="Toggle theme">☼ Theme</button>
+        </div>
       </div>
       <div class="content">
         <section class="hero">
-          <h1>Active now, next queued, countdown live.</h1>
+          <div class="hero-copy">
+            <div>
+              <p class="eyebrow">Live rotation status</p>
+              <h1>Active now, next queued, countdown live.</h1>
+              <p>Track the current identity slot, see what is next, and keep the handoff visible at a glance.</p>
+            </div>
+            <div class="hero-badge" id="model-status">RUNNING</div>
+          </div>
+          <p class="countdown-caption">Next switch in</p>
           <div class="countdown" id="countdown">--:--</div>
           <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+          <div class="live-meta">
+            <span>Local <strong id="clock-label">--:--:--</strong></span>
+            <span>Last sync <strong id="last-sync">waiting</strong></span>
+            <span>Interval <strong id="interval-label">--</strong></span>
+          </div>
           <div class="meta">
             <div class="tile">
               <div class="label">Active slot</div>
@@ -273,11 +354,14 @@ HTML_TEMPLATE = r"""<!doctype html>
         </section>
         <aside class="side">
           <section class="panel">
-            <h2>Configured slots</h2>
+            <div class="panel-heading"><h2>Configured slots</h2><span class="slot-count" id="slot-count">--</span></div>
+            <div class="slot-toolbar"><input class="filter-input" id="slot-filter" type="search" placeholder="Filter identities…" aria-label="Filter configured identities" /></div>
             <div class="slot-list" id="slot-list"></div>
+            <div class="empty-state" id="empty-state" hidden>No matching slots.</div>
           </section>
           <section class="panel footer-note">
-            Reads the local <code>.env</code> file, preserves slot order, and never exposes raw API keys. The dashboard updates live through SSE and keeps the countdown in sync client-side.
+            Reads the local <code>.env</code> file, preserves slot order, and never exposes raw API keys. Live updates use SSE.
+            <p class="hint"><kbd>R</kbd> refreshes state · <kbd>T</kbd> toggles theme</p>
           </section>
         </aside>
       </div>
@@ -288,33 +372,42 @@ HTML_TEMPLATE = r"""<!doctype html>
     const bootstrap = JSON.parse(document.getElementById('bootstrap').textContent);
     const $ = (id) => document.getElementById(id);
     const fmt = (ms) => {
-      const remaining = Math.max(0, ms);
-      const total = Math.ceil(remaining / 1000);
-      const m = String(Math.floor(total / 60)).padStart(2, '0');
-      const s = String(total % 60).padStart(2, '0');
-      return `${m}:${s}`;
+      const total = Math.ceil(Math.max(0, ms) / 1000);
+      return `${String(Math.floor(total / 60)).padStart(2, '0')}:${String(total % 60).padStart(2, '0')}`;
     };
     const statusBadge = $('status-badge');
     const statusText = $('status-text');
     const countdownEl = $('countdown');
     const progressFill = $('progress-fill');
-    const clockLabel = $('clock-label');
-
+    const filterInput = $('slot-filter');
     let state = bootstrap;
+    let connectionState = 'syncing';
+    let lastSyncAt = null;
 
     function renderSlots() {
       const list = $('slot-list');
+      const query = filterInput.value.trim().toLowerCase();
       list.innerHTML = '';
-      for (const slot of state.slots) {
+      const visible = state.slots.filter((slot) => `${slot.google_id_masked} ${slot.api_key_name}`.toLowerCase().includes(query));
+      $('slot-count').textContent = `${visible.length}/${state.slot_count} visible`;
+      $('empty-state').hidden = visible.length !== 0;
+      for (const slot of visible) {
         const row = document.createElement('div');
         row.className = 'slot' + (slot.slot === state.active_slot ? ' active' : '');
-        row.innerHTML = `
-          <div>
-            <strong><span class="num">#${String(slot.slot).padStart(2, '0')}</span> ${slot.google_id_masked}</strong>
-            <div class="small">${slot.api_key_name}</div>
-          </div>
-          <div>${slot.slot === state.active_slot ? 'active' : 'queued'}</div>
-        `;
+        const details = document.createElement('div');
+        const identity = document.createElement('strong');
+        const number = document.createElement('span');
+        number.className = 'num';
+        number.textContent = `#${String(slot.slot).padStart(2, '0')}`;
+        identity.append(number, ` ${slot.google_id_masked}`);
+        const keyName = document.createElement('div');
+        keyName.className = 'small';
+        keyName.textContent = slot.api_key_name;
+        details.append(identity, keyName);
+        const status = document.createElement('div');
+        status.className = 'slot-status';
+        status.textContent = slot.slot === state.active_slot ? 'active' : 'queued';
+        row.append(details, status);
         list.appendChild(row);
       }
     }
@@ -327,43 +420,81 @@ HTML_TEMPLATE = r"""<!doctype html>
       $('active-token').textContent = state.active_api_key_masked;
       $('next-token').textContent = state.next_api_key_masked;
       $('next-switch').textContent = state.next_switch_label;
+      $('interval-label').textContent = `${state.interval_seconds}s`;
+      $('model-status').textContent = state.status.toUpperCase();
       renderSlots();
     }
 
     function applyStatus() {
-      statusBadge.classList.remove('status-warning', 'status-switching');
-      if (state.status === 'warning') statusBadge.classList.add('status-warning');
-      if (state.status === 'switching') statusBadge.classList.add('status-switching');
-      statusText.textContent = state.status;
+      statusBadge.classList.remove('offline', 'syncing');
+      statusBadge.classList.add(connectionState);
+      statusText.textContent = connectionState === 'offline' ? 'offline' : connectionState === 'syncing' ? 'connecting' : 'live';
+      $('card').setAttribute('data-connection', connectionState);
     }
 
     function tick() {
       const now = Date.now();
       const remainingMs = Math.max(0, state.next_switch_at_ms - now);
       countdownEl.textContent = fmt(remainingMs);
-      progressFill.style.width = `${Math.max(0, Math.min(100, (1 - remainingMs / (state.interval_seconds * 1000)) * 100)).toFixed(2)}%`;
-      clockLabel.textContent = new Date(now).toLocaleTimeString([], {hour: '2-digit', minute: '2-digit', second: '2-digit'});
+      const progress = Math.max(0, Math.min(100, (1 - remainingMs / (state.interval_seconds * 1000)) * 100));
+      progressFill.style.width = `${progress.toFixed(2)}%`;
+      $('clock-label').textContent = new Date(now).toLocaleTimeString([], {hour: '2-digit', minute: '2-digit', second: '2-digit'});
+      $('last-sync').textContent = lastSyncAt ? `${Math.max(0, Math.round((now - lastSyncAt) / 1000))}s ago` : 'waiting';
+      document.title = `${fmt(remainingMs)} · ggtmoni`;
       requestAnimationFrame(tick);
+    }
+
+    async function refreshState() {
+      connectionState = 'syncing';
+      applyStatus();
+      try {
+        const response = await fetch('/api/state', {cache: 'no-store'});
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        update(await response.json());
+      } catch (error) {
+        connectionState = 'offline';
+        applyStatus();
+      }
     }
 
     function update(next) {
       state = next;
+      lastSyncAt = Date.now();
+      connectionState = 'live';
       renderStatic();
       applyStatus();
     }
+
+    function toggleTheme() {
+      const next = document.body.dataset.theme === 'light' ? 'dark' : 'light';
+      document.body.dataset.theme = next;
+      localStorage.setItem('ggtmoni-theme', next);
+      $('theme-toggle').textContent = next === 'light' ? '☾ Dark' : '☼ Theme';
+    }
+
+    const savedTheme = localStorage.getItem('ggtmoni-theme');
+    if (savedTheme === 'light' || savedTheme === 'dark') document.body.dataset.theme = savedTheme;
+    $('theme-toggle').textContent = document.body.dataset.theme === 'light' ? '☾ Dark' : '☼ Theme';
+    $('theme-toggle').addEventListener('click', toggleTheme);
+    $('refresh-button').addEventListener('click', refreshState);
+    filterInput.addEventListener('input', renderSlots);
+    document.addEventListener('keydown', (event) => {
+      if (event.target.matches('input, textarea')) return;
+      if (event.key.toLowerCase() === 'r') refreshState();
+      if (event.key.toLowerCase() === 't') toggleTheme();
+    });
 
     renderStatic();
     applyStatus();
     tick();
 
     const source = new EventSource('/events');
+    source.onopen = () => { connectionState = 'live'; applyStatus(); };
     source.onmessage = (event) => {
-      update(JSON.parse(event.data));
+      try { update(JSON.parse(event.data)); }
+      catch (_) { connectionState = 'offline'; applyStatus(); }
     };
-    source.onerror = () => {
-      statusText.textContent = 'connection lost';
-      statusBadge.classList.add('status-switching');
-    };
+    source.onerror = () => { connectionState = 'offline'; applyStatus(); };
   </script>
 </body>
 </html>
@@ -384,6 +515,9 @@ class Handler(BaseHTTPRequestHandler):
         self.send_header("Content-Type", content_type)
         self.send_header("Content-Length", str(len(body)))
         self.send_header("Cache-Control", "no-store")
+        self.send_header("X-Content-Type-Options", "nosniff")
+        self.send_header("Referrer-Policy", "no-referrer")
+        self.send_header("X-Frame-Options", "SAMEORIGIN")
         self.end_headers()
         self.wfile.write(body)
 
@@ -403,11 +537,17 @@ class Handler(BaseHTTPRequestHandler):
             self._send_json(self.server.model.snapshot())
             return
 
+        if parsed.path == "/healthz":
+            self._send_json({"status": "ok", "slot_count": len(self.server.model.slots)})
+            return
+
         if parsed.path == "/events":
             self.send_response(HTTPStatus.OK)
             self.send_header("Content-Type", "text/event-stream; charset=utf-8")
             self.send_header("Cache-Control", "no-cache")
             self.send_header("Connection", "keep-alive")
+            self.send_header("X-Content-Type-Options", "nosniff")
+            self.send_header("X-Accel-Buffering", "no")
             self.end_headers()
             try:
                 while True:

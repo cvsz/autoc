@@ -51,10 +51,16 @@ The dashboard serves:
 
 - `/`: embedded HTML with the initial snapshot;
 - `/api/state`: a JSON snapshot with masked display values; and
-- `/events`: an SSE stream that emits a snapshot every second.
+- `/events`: an SSE stream that emits a snapshot every second; and
+- `/healthz`: a small `{"status":"ok","slot_count":N}` health response.
 
 There is no write endpoint. A browser reconnects to `/events` after a network
 failure. The server sets `Cache-Control: no-store` on JSON and HTML responses.
+
+The interface also provides a light/dark theme toggle (remembered in browser
+storage), identity filtering, a live/offline connection badge, and keyboard
+shortcuts: `R` refreshes `/api/state`, while `T` toggles the theme. The GUI
+offers the same identity filter plus refresh and timer reset controls.
 
 ## Troubleshooting
 

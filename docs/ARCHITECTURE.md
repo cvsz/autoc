@@ -28,7 +28,8 @@ rotation rules.
 
 Runs a `ThreadingHTTPServer`. The HTML is embedded in the module so the web
 dashboard has no frontend build step. `/events` emits JSON snapshots over SSE;
-the browser interpolates the countdown locally between snapshots.
+the browser interpolates the countdown locally between snapshots. `/healthz`
+provides a small process-monitoring response without exposing slot values.
 
 ### `gui.py`
 

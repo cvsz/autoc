@@ -50,6 +50,8 @@ class MonitorGUI:
         self.next_token_var = StringVar()
         self.switch_var = StringVar()
         self.error_var = StringVar()
+        self.filter_var = StringVar()
+        self.slot_count_var = StringVar()
 
         self._configure_window()
         self._build_layout()
@@ -140,6 +142,7 @@ class MonitorGUI:
         ).pack(anchor="w", pady=(6, 0))
         controls = ttk.Frame(header, style="Panel.TFrame")
         controls.pack(anchor="e", pady=(12, 0))
+        ttk.Label(controls, text="● LIVE", style="Accent.TLabel").pack(side="left", padx=(0, 18))
         ttk.Button(controls, text="Refresh now", command=self.refresh_from_disk).pack(side="left", padx=(0, 10))
         ttk.Button(controls, text="Reset timer", command=self.reset_timer).pack(side="left")
 
@@ -196,7 +199,18 @@ class MonitorGUI:
         self._metric(info_grid, 2, 0, "Active token", self.active_token_var)
         self._metric(info_grid, 2, 1, "Next token", self.next_token_var)
 
-        ttk.Label(right, text="Configured slots", style="Mono.TLabel").pack(anchor="w")
+        slot_heading = ttk.Frame(right, style="Panel.TFrame")
+        slot_heading.pack(fill="x")
+        ttk.Label(slot_heading, text="Configured slots", style="Mono.TLabel").pack(side="left")
+        ttk.Label(slot_heading, textvariable=self.slot_count_var, style="Muted.TLabel").pack(side="right")
+        filter_row = ttk.Frame(right, style="Panel.TFrame")
+        filter_row.pack(fill="x", pady=(12, 0))
+        filter_entry = ttk.Entry(filter_row, textvariable=self.filter_var)
+        filter_entry.pack(side="left", fill="x", expand=True)
+        filter_entry.insert(0, "Filter identities…")
+        filter_entry.bind("<FocusIn>", lambda _event: self._clear_filter_placeholder(filter_entry))
+        filter_entry.bind("<KeyRelease>", lambda _event: self._refresh_state())
+        ttk.Button(filter_row, text="Clear", command=lambda: self._clear_filter(filter_entry)).pack(side="left", padx=(8, 0))
         self.tree = ttk.Treeview(
             right,
             columns=("slot", "identity", "key"),
@@ -210,7 +224,7 @@ class MonitorGUI:
         self.tree.column("slot", width=60, anchor="center", stretch=False)
         self.tree.column("identity", width=220, anchor="w")
         self.tree.column("key", width=180, anchor="w")
-        self.tree.pack(fill=BOTH, expand=True, pady=(12, 0))
+        self.tree.pack(fill=BOTH, expand=True, pady=(10, 0))
 
         self.footer = ttk.Label(
             right,
@@ -226,6 +240,15 @@ class MonitorGUI:
         frame.grid(row=row, column=col, sticky="nsew", padx=6, pady=6)
         ttk.Label(frame, text=label, style="Muted.TLabel").pack(anchor="w")
         ttk.Label(frame, textvariable=variable, style="TLabel").pack(anchor="w", pady=(5, 0))
+
+    def _clear_filter_placeholder(self, entry: ttk.Entry) -> None:
+        if self.filter_var.get() == "Filter identities…":
+            self.filter_var.set("")
+
+    def _clear_filter(self, entry: ttk.Entry) -> None:
+        self.filter_var.set("")
+        entry.focus_set()
+        self._refresh_state()
 
     def _set_model(self, slots: list[Slot], interval: float, refresh_mtime: bool = True) -> None:
         self.model = CountdownModel(slots, interval)
@@ -285,6 +308,14 @@ class MonitorGUI:
         self.active_token_var.set(str(state["active_api_key_masked"]))
         self.next_token_var.set(str(state["next_api_key_masked"]))
         self.switch_var.set(f"Next switch at {state['next_switch_label']}")
+        query = self.filter_var.get().strip().lower()
+        if query == "filter identities…":
+            query = ""
+        visible_slots = [
+            slot for slot in state["slots"]
+            if not query or query in str(slot["google_id_masked"]).lower() or query in str(slot["api_key_name"]).lower()
+        ]
+        self.slot_count_var.set(f"{len(visible_slots)}/{int(state['slot_count'])} visible")
         self.progress["value"] = float(state["progress"]) * 100.0
         self._draw_ring(float(state["progress"]), str(state["status"]))
 
@@ -292,7 +323,7 @@ class MonitorGUI:
             self.tree.delete(row)
 
         active_slot = int(state["active_slot"])
-        for slot in state["slots"]:
+        for slot in visible_slots:
             slot_num = int(slot["slot"])
             marker = "active" if slot_num == active_slot else "queued"
             self.tree.insert(

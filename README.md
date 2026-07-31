@@ -88,6 +88,7 @@ Routes:
 | `/` | Dashboard HTML and initial state |
 | `/api/state` | One JSON state snapshot |
 | `/events` | One-way live state stream using SSE |
+| `/healthz` | Lightweight JSON health check for local process monitors |
 
 The HTTP server has no authentication or TLS. Bind to `127.0.0.1` for local
 use, or put it behind an authenticated reverse proxy before using a wider
@@ -102,8 +103,12 @@ python3 gui.py --env .env --interval 60
 ```
 
 The GUI supports refresh, timer reset, live file reload, and a masked slot
-table. If Tkinter is unavailable, `app.py --gui` falls back to the web
-dashboard and reports the reason on stderr.
+table with filtering. If Tkinter is unavailable, `app.py --gui` falls back to
+the web dashboard and reports the reason on stderr.
+
+The web dashboard adds a live connection indicator, light/dark theme toggle,
+slot filtering, keyboard shortcuts (`R` refresh and `T` theme), and a `/healthz`
+endpoint for process monitors.
 
 ### Terminal monitor
 

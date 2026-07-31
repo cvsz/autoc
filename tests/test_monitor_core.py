@@ -63,6 +63,8 @@ class MonitorCoreTests(unittest.TestCase):
         self.assertIn("next_switch_label", snapshot)
         self.assertGreaterEqual(snapshot["progress"], 0.0)
         self.assertLessEqual(snapshot["progress"], 1.0)
+        self.assertNotIn("active_google_id", snapshot)
+        self.assertNotIn("next_google_id", snapshot)
 
     def test_reloading_model_refreshes_when_env_changes(self) -> None:
         path = self.write_env(
