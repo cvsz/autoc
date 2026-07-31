@@ -17,6 +17,7 @@ permissions:
 jobs:
   release-windows-gui:
     runs-on: windows-latest
+    environment: production
 
     steps:
       - name: Checkout
@@ -25,7 +26,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
+          python-version: ${{ vars.PYTHON_VERSION }}
 
       - name: Install build tools
         shell: pwsh
@@ -40,8 +41,9 @@ jobs:
       - name: Verify release payload
         shell: pwsh
         run: |
-          if (-not (Test-Path dist\ggtmoni-windows11-gui.zip)) {
-            throw "Missing dist\\ggtmoni-windows11-gui.zip"
+          $zipPath = "dist\${{ vars.RELEASE_ASSET_NAME }}"
+          if (-not (Test-Path $zipPath)) {
+            throw "Missing $zipPath"
           }
 
       - name: Validate release tag
@@ -55,4 +57,4 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ inputs.tag_name || github.ref_name }}
-          files: dist/ggtmoni-windows11-gui.zip
+          files: dist/${{ vars.RELEASE_ASSET_NAME }}
