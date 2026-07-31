@@ -1,96 +1,139 @@
 # ggtmoni
 
-This project reads the local `.env` file, pairs the `GOOGLE_ID_*` values with the
-Google API key lines in file order, and shows the next account in rotation with a live countdown.
+`ggtmoni` is a small, dependency-free Python monitor for rotating through
+ordered Google identity/API-key slots. It provides the same countdown model in
+three interfaces:
 
-## What is included
+- a browser dashboard with Server-Sent Events (SSE),
+- a native Tkinter desktop GUI, and
+- a terminal monitor.
 
-- Web dashboard with live SSE updates
-- Native Tkinter GUI
-- Terminal countdown monitor
-- Shared parser and countdown model
-- Regression tests for the shared logic
+The application reads a local `.env` file, reloads it when it changes, keeps
+the configured slot order, and masks credentials in rendered output.
 
-## Run
+> Security: this tool is a local operations monitor, not an API-key vault. Do
+> not commit `.env`, expose the dashboard to an untrusted network, or paste
+> real credentials into an issue, log, screenshot, or support request. See
+> [SECURITY.md](SECURITY.md).
 
-Web dashboard:
+## Requirements
 
-```bash
-python3 app.py
-```
+- Python 3.11 or newer
+- A local `.env` file containing at least one complete identity/key pair
+- Tkinter only when using the desktop GUI
 
-By default the web dashboard binds to `0.0.0.0`, so if the machine is on a LAN
-you can open it from another device at `http://<machine-ip>:8000`. Set `HOST=127.0.0.1`
-or run `python3 app.py --host 127.0.0.1` if you want localhost-only access.
+No runtime third-party package is required for the web or terminal interfaces.
+The optional `build` extra installs PyInstaller for the Windows executable.
 
-Installed command:
-
-```bash
-ggtmoni
-```
-
-Native GUI:
-
-```bash
-python3 app.py --gui
-```
-
-Installed command:
-
-```bash
-ggtmoni-gui
-```
-
-Terminal monitor:
-
-```bash
-python3 realtime_monitor.py
-```
-
-Installed command:
-
-```bash
-ggtmoni-term
-```
-
-Editable install:
-
-```bash
-python3 -m pip install -e .
-```
-
-If your system Python is externally managed, use a virtual environment first:
+## Quick start
 
 ```bash
 python3 -m venv .venv
-.venv/bin/python3 -m pip install -e .
+.venv/bin/python -m pip install -e .
+cp .env.example .env
+# Edit .env and replace every placeholder with a real value.
+./.venv/bin/python app.py --host 127.0.0.1
 ```
 
-## Env file
+Open <http://127.0.0.1:8000>. The server prints the actual port if port 8000
+is already in use.
 
-The app expects a flat `.env` file with ordered pairs like:
+The installed console commands are:
 
-```text
-GOOGLE_ID_01=someone@example.com
-GOOGLE_API_KEY=secret-value
-GOOGLE_ID_02=another@example.com
-GOOGLE_API_KEY=secret-value
+```bash
+ggtmoni                 # web dashboard
+ggtmoni-gui             # Tkinter GUI
+ggtmoni-term --once     # one terminal snapshot
 ```
 
-The repeated `GOOGLE_API_KEY` name is intentional. The loader uses file order, not variable names, so each identity stays paired with the correct key line.
+See [docs/USAGE.md](docs/USAGE.md) for all options and examples.
 
-## Notes
+## Configuration
 
-- The web UI reloads when `.env` changes.
-- The native GUI reloads when `.env` changes.
-- The executable/standalone build looks for `.env` beside the app on Windows.
-- Tkinter must be installed globally for `--gui` to open a window.
-- Secrets are masked in the UI and API output.
+Copy `.env.example` to `.env`. Pair each `GOOGLE_ID_*` line with the next
+`GOOGLE_API_KEY*` line. The key name may repeat intentionally; pairing is based
+on file order.
 
-## Windows 11 Standalone
+```dotenv
+GOOGLE_ID_01=first@example.com
+GOOGLE_API_KEY=replace-me
+GOOGLE_ID_02=second@example.com
+GOOGLE_API_KEY=replace-me
+```
 
-The GUI can be frozen into a standalone Windows 11 executable with PyInstaller.
-Use the files in `windows/` from a Windows machine:
+Important rules:
+
+- Keep each identity immediately before its matching key.
+- At least one complete pair is required.
+- A `GOOGLE_ID_*` without a following key is an error.
+- `MONITOR_INTERVAL_SECONDS` controls the default web-dashboard interval.
+- `HOST` and `PORT` provide web-dashboard defaults; CLI flags override them.
+- The desktop executable looks for `.env` beside the executable.
+
+The parser does not perform Google API calls or validate the credentials with
+Google. It only loads, pairs, rotates, and masks the configured values.
+
+## Interfaces
+
+### Web dashboard
+
+```bash
+python3 app.py --env .env --interval 60 --host 127.0.0.1 --port 8000
+```
+
+Routes:
+
+| Route | Purpose |
+| --- | --- |
+| `/` | Dashboard HTML and initial state |
+| `/api/state` | One JSON state snapshot |
+| `/events` | One-way live state stream using SSE |
+
+The HTTP server has no authentication or TLS. Bind to `127.0.0.1` for local
+use, or put it behind an authenticated reverse proxy before using a wider
+network binding.
+
+### Native GUI
+
+```bash
+python3 app.py --gui --env .env --interval 60
+# or
+python3 gui.py --env .env --interval 60
+```
+
+The GUI supports refresh, timer reset, live file reload, and a masked slot
+table. If Tkinter is unavailable, `app.py --gui` falls back to the web
+dashboard and reports the reason on stderr.
+
+### Terminal monitor
+
+```bash
+python3 realtime_monitor.py --env .env --interval 60
+python3 realtime_monitor.py --env .env --once
+```
+
+Press `Ctrl+C` to stop a continuously running terminal monitor.
+
+## Development
+
+```bash
+make build
+```
+
+This creates or uses `.venv`, installs the project, compiles the modules, and
+runs the standard-library test suite. To run only tests:
+
+```bash
+.venv/bin/python -m unittest discover -s tests -p 'test_*.py' -v
+```
+
+The project intentionally keeps the runtime small: `monitor_core.py` owns
+parsing, masking, countdown state, and reload behavior; the three frontends
+render that shared state. See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
+
+## Windows 11 standalone build
+
+From Windows PowerShell:
 
 ```powershell
 python -m venv .venv
@@ -98,12 +141,52 @@ python -m venv .venv
 powershell -ExecutionPolicy Bypass -File windows\build_gui.ps1
 ```
 
-The build produces `dist\windows\ggtmoni-gui.exe` and
-`dist\ggtmoni-windows11-gui.zip`. Place a `.env` file next to the
-executable before launching it. Copy `.env.example` and rename it to `.env` if
-you need a template.
+The build creates:
 
-The same build is available in GitHub Actions as a Windows 11 zip artifact
-named `ggtmoni-windows11-gui-zip`.
+- `dist\windows\ggtmoni-gui.exe`
+- `dist\windows\.env.example`
+- `dist\ggtmoni-windows11-gui.zip`
 
-Tagged releases (`v*`) publish the same zip as a GitHub release asset.
+Put a private `.env` beside the executable before starting it. Detailed
+packaging notes are in [windows/README.md](windows/README.md).
+
+## Releases and packages
+
+The GitHub Actions workflows provide:
+
+- `Windows GUI Build`: builds and smoke-tests the standalone executable.
+- `Windows GUI Release`: publishes the Windows zip for a `v*` tag.
+- `Publish Python Package`: builds and uploads the package to PyPI.
+
+To create a release locally, update the version in `pyproject.toml`, run the
+tests, create a signed tag, and push it:
+
+```bash
+make build
+git tag -s vX.Y.Z -m "Release vX.Y.Z"
+git push origin main vX.Y.Z
+```
+
+The package workflow uses the `production` GitHub environment and its
+`PYPI_API_KEY` secret. Never put that value in the repository. See
+[docs/GITHUB.md](docs/GITHUB.md) for workflow, environment, and release
+operations.
+
+## Documentation map
+
+- [Usage guide](docs/USAGE.md)
+- [Architecture](docs/ARCHITECTURE.md)
+- [Operations and releases](docs/OPERATIONS.md)
+- [GitHub configuration](docs/GITHUB.md)
+- [Contributing](CONTRIBUTING.md)
+- [Security policy](SECURITY.md)
+- [Support](SUPPORT.md)
+- [Code of Conduct](CODE_OF_CONDUCT.md)
+- [Changelog](CHANGELOG.md)
+- [Design notes](realtime-monitor-countdown-design.md)
+
+## License
+
+This repository currently has no declared open-source license. Until a license
+is added by the copyright holder, treat the source as proprietary and ask the
+maintainer before redistributing or incorporating it into another project.

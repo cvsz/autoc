@@ -8,6 +8,23 @@ version = "1.0.0"
 description = "Realtime monitor countdown for Google identity rotation"
 readme = "README.md"
 requires-python = ">=3.11"
+keywords = ["monitoring", "countdown", "google", "tkinter", "sse"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: Console",
+    "Environment :: Win32 (MS Windows)",
+    "Intended Audience :: System Administrators",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: System :: Monitoring",
+]
+
+[project.urls]
+Homepage = "https://github.com/cvsz/ggtmoni"
+Documentation = "https://github.com/cvsz/ggtmoni#readme"
+Issues = "https://github.com/cvsz/ggtmoni/issues"
+Changelog = "https://github.com/cvsz/ggtmoni/blob/main/CHANGELOG.md"
 
 [project.optional-dependencies]
 build = ["pyinstaller>=6.0"]

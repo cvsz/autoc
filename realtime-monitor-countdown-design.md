@@ -1,5 +1,10 @@
 # Realtime Monitor Countdown Design
 
+Status: implemented in `monitor_core.py`, `app.py`, `gui.py`, and
+`realtime_monitor.py`. This document records the original design decisions and
+the remaining product questions; current usage details live in
+[`docs/USAGE.md`](docs/USAGE.md).
+
 ## Source Inputs
 
 The only concrete inputs currently present are the `.env` credentials:
@@ -102,18 +107,21 @@ Recommended visual hierarchy:
 - Missing keys should fail fast with a clear config error.
 - Duplicate or malformed identities should be rejected or warned about.
 
-## Implementation Next Step
+## Implemented components
 
-Build a small config loader that:
+The implementation now has a shared config/model layer that:
 
-- reads the `.env` values,
-- normalizes the configured slots,
-- exposes `activeSlot`, `nextSlot`, and `nextSwitchAt`,
-- emits realtime state updates for the UI.
+- reads ordered `.env` values,
+- normalizes them into `Slot` objects,
+- exposes active/next slots and the next switch timestamp,
+- reloads when the file mtime changes, and
+- emits realtime snapshots to the web, GUI, and terminal frontends.
+
+The web frontend uses SSE and the GUI/terminal use the same model directly.
+The implementation is intentionally local and does not make Google API calls.
 
 ## Open Questions
 
 - What interval should the countdown use by default?
 - Does “next used” mean the next identity in rotation, or the next monitor refresh cycle?
 - Should the active identity be chosen by strict numeric order or by availability/health?
-
