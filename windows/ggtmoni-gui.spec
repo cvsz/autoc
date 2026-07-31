@@ -8,7 +8,11 @@ The executable is windowed, one-file, and expects a .env file next to the EXE.
 from pathlib import Path
 
 block_cipher = None
-project_root = Path(__file__).resolve().parent.parent
+# PyInstaller executes spec files with exec and does not guarantee that
+# __file__ exists. build_gui.ps1 sets the working directory to the
+# repository root before invoking PyInstaller, so resolve the source files
+# from the current directory instead.
+project_root = Path.cwd().resolve()
 
 a = Analysis(
     [str(project_root / "gui.py")],
