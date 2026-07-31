@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ggtmoni"
+version = "1.0.0"
+description = "Realtime monitor countdown for Google identity rotation"
+readme = "README.md"
+requires-python = ">=3.11"
+
+[project.optional-dependencies]
+build = ["pyinstaller>=6.0"]
+
+[project.scripts]
+ggtmoni = "app:main"
+ggtmoni-web = "app:main"
+ggtmoni-gui = "gui:main"
+ggtmoni-term = "realtime_monitor:main"
+
+[tool.setuptools]
+py-modules = ["app", "gui", "monitor_core", "realtime_monitor"]

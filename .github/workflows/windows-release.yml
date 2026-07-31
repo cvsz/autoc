@@ -1,0 +1,58 @@
+name: Windows GUI Release
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      tag_name:
+        description: "Release tag to publish, for example v1.0.1"
+        required: false
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  release-windows-gui:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install build tools
+        shell: pwsh
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e ".[build]"
+
+      - name: Build standalone GUI
+        shell: pwsh
+        run: powershell -ExecutionPolicy Bypass -File windows\build_gui.ps1
+
+      - name: Verify release payload
+        shell: pwsh
+        run: |
+          if (-not (Test-Path dist\ggtmoni-windows11-gui.zip)) {
+            throw "Missing dist\\ggtmoni-windows11-gui.zip"
+          }
+
+      - name: Validate release tag
+        shell: pwsh
+        run: |
+          if ("${{ github.event_name }}" -eq "workflow_dispatch" -and [string]::IsNullOrWhiteSpace("${{ inputs.tag_name }}")) {
+            throw "workflow_dispatch requires tag_name so the release asset can be published"
+          }
+
+      - name: Publish release asset
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ inputs.tag_name || github.ref_name }}
+          files: dist/ggtmoni-windows11-gui.zip

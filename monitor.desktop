@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Realtime Monitor Countdown
+Comment=Launch the native countdown monitor
+Exec=/bin/bash /home/cvsz/ggtmoni/launch_monitor.sh
+Path=/home/cvsz/ggtmoni
+Terminal=false
+Categories=Utility;
