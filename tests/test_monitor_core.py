@@ -6,7 +6,7 @@ from unittest.mock import patch
 from pathlib import Path
 
 import monitor_core
-from monitor_core import CountdownModel, ReloadingCountdownModel, mask_email, parse_env_pairs
+from monitor_core import CountdownModel, ReloadingCountdownModel, fingerprint_secret, mask_email, parse_env_pairs
 
 
 class MonitorCoreTests(unittest.TestCase):
@@ -65,6 +65,18 @@ class MonitorCoreTests(unittest.TestCase):
         self.assertLessEqual(snapshot["progress"], 1.0)
         self.assertNotIn("active_google_id", snapshot)
         self.assertNotIn("next_google_id", snapshot)
+        self.assertEqual("local-rotation-only", snapshot["usage_mode"])
+        self.assertEqual("active", snapshot["slots"][0]["rotation_state"])
+        self.assertEqual("next", snapshot["slots"][1]["rotation_state"])
+        self.assertEqual(7, snapshot["slots"][0]["api_key_length"])
+        self.assertEqual(fingerprint_secret("key-one"), snapshot["slots"][0]["api_key_fingerprint"])
+
+    def test_key_fingerprint_is_stable_and_not_the_secret(self) -> None:
+        fingerprint = fingerprint_secret("key-one")
+
+        self.assertEqual(fingerprint, fingerprint_secret("key-one"))
+        self.assertEqual(12, len(fingerprint))
+        self.assertNotIn("key-one", fingerprint)
 
     def test_reloading_model_refreshes_when_env_changes(self) -> None:
         path = self.write_env(

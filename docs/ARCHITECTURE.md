@@ -50,8 +50,11 @@ seconds and briefly reports `switching` at the transition boundary.
 ## Security boundaries
 
 The process must read raw values to pair and rotate them, but renderers should
-use masked fields. The HTTP server has no authentication or encryption. The
-`.env` file and process host are therefore the primary security boundaries.
+use masked fields. Snapshot inventory exposes only key masks, lengths, and
+short SHA-256 fingerprints; it does not expose raw keys or raw identities. The
+HTTP server has no authentication or encryption. The `.env` file and process
+host are therefore the primary security boundaries. Provider usage telemetry is
+explicitly outside this application's current boundary.
 
 ## Testing strategy
 

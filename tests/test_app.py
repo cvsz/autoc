@@ -109,6 +109,8 @@ class AppTests(unittest.TestCase):
         self.assertIn("connection-badge", body)
         self.assertIn("theme-toggle", body)
         self.assertIn("slot-filter", body)
+        self.assertIn("api_key_fingerprint", body)
+        self.assertIn("usage_mode", body)
         self.assertIn("/events", body)
 
 

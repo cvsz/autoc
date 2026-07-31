@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import hashlib
 import time
 import sys
 from dataclasses import dataclass
@@ -100,6 +101,11 @@ def mask_secret(value: str, visible: int = 4) -> str:
     return f"{value[:visible]}…{value[-visible:]}"
 
 
+def fingerprint_secret(value: str) -> str:
+    """Return a non-reversible identifier useful for key inventory views."""
+    return hashlib.sha256(value.encode("utf-8")).hexdigest()[:12].upper()
+
+
 def mask_email(value: str) -> str:
     if "@" not in value:
         return mask_secret(value)
@@ -157,11 +163,23 @@ class CountdownModel:
             "status": status,
             "slot_count": len(self.slots),
             "next_switch_label": time.strftime("%H:%M:%S", time.localtime(next_switch_at)),
+            "usage_mode": "local-rotation-only",
+            "usage_note": "Provider quota telemetry is not collected by ggtmoni.",
             "slots": [
                 {
                     "slot": slot.slot,
                     "google_id_masked": mask_email(slot.google_id),
                     "api_key_name": slot.api_key_name,
+                    "api_key_masked": mask_secret(slot.api_key),
+                    "api_key_length": len(slot.api_key),
+                    "api_key_fingerprint": fingerprint_secret(slot.api_key),
+                    "rotation_state": (
+                        "active"
+                        if slot.slot == active.slot
+                        else "next"
+                        if slot.slot == next_slot.slot
+                        else "queued"
+                    ),
                 }
                 for slot in self.slots
             ],

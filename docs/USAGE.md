@@ -62,6 +62,17 @@ storage), identity filtering, a live/offline connection badge, and keyboard
 shortcuts: `R` refreshes `/api/state`, while `T` toggles the theme. The GUI
 offers the same identity filter plus refresh and timer reset controls.
 
+Each slot inventory row includes the key variable name, masked key, key length,
+and a short SHA-256 fingerprint for recognizing a configured key without
+revealing it. The `rotation_state` is `active`, `next`, or `queued`.
+
+### Usage-data boundary
+
+The inventory is configuration and local rotation telemetry. ggtmoni does not
+make Google API requests, inspect Google quota counters, or collect request
+counts. Provider-side usage requires a separate authenticated integration and
+must not be added to the public dashboard without explicit access controls.
+
 ## Troubleshooting
 
 | Symptom | Check |

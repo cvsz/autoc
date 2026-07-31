@@ -213,7 +213,7 @@ class MonitorGUI:
         ttk.Button(filter_row, text="Clear", command=lambda: self._clear_filter(filter_entry)).pack(side="left", padx=(8, 0))
         self.tree = ttk.Treeview(
             right,
-            columns=("slot", "identity", "key"),
+            columns=("slot", "identity", "key", "fingerprint"),
             show="headings",
             height=16,
             selectmode="browse",
@@ -221,9 +221,11 @@ class MonitorGUI:
         self.tree.heading("slot", text="Slot")
         self.tree.heading("identity", text="Identity")
         self.tree.heading("key", text="Key")
+        self.tree.heading("fingerprint", text="Fingerprint")
         self.tree.column("slot", width=60, anchor="center", stretch=False)
         self.tree.column("identity", width=220, anchor="w")
         self.tree.column("key", width=180, anchor="w")
+        self.tree.column("fingerprint", width=130, anchor="w")
         self.tree.pack(fill=BOTH, expand=True, pady=(10, 0))
 
         self.footer = ttk.Label(
@@ -332,7 +334,8 @@ class MonitorGUI:
                 values=(
                     f"{slot_num:02d} ({marker})",
                     str(slot["google_id_masked"]),
-                    str(slot["api_key_name"]),
+                    f"{slot['api_key_name']} · {slot['api_key_masked']} ({slot['api_key_length']})",
+                    str(slot["api_key_fingerprint"]),
                 ),
             )
 

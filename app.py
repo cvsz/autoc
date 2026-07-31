@@ -264,6 +264,8 @@ HTML_TEMPLATE = r"""<!doctype html>
       font-size: 0.82rem;
       margin-top: 4px;
     }
+    .slot .key-detail { margin-top: 5px; color: var(--text); font-size: 0.72rem; }
+    .slot .key-fingerprint { margin-top: 3px; color: var(--muted); font-size: 0.68rem; letter-spacing: 0.04em; }
     .slot strong { font-size: 0.95rem; }
     .slot .num {
       color: var(--accent-2);
@@ -320,6 +322,7 @@ HTML_TEMPLATE = r"""<!doctype html>
             <span>Local <strong id="clock-label">--:--:--</strong></span>
             <span>Last sync <strong id="last-sync">waiting</strong></span>
             <span>Interval <strong id="interval-label">--</strong></span>
+            <span>Usage <strong id="usage-label">local only</strong></span>
           </div>
           <div class="meta">
             <div class="tile">
@@ -361,6 +364,7 @@ HTML_TEMPLATE = r"""<!doctype html>
           </section>
           <section class="panel footer-note">
             Reads the local <code>.env</code> file, preserves slot order, and never exposes raw API keys. Live updates use SSE.
+            <p class="hint">Key details are masked and fingerprinted. Usage means local rotation state only; provider quota usage is not collected.</p>
             <p class="hint"><kbd>R</kbd> refreshes state · <kbd>T</kbd> toggles theme</p>
           </section>
         </aside>
@@ -388,7 +392,7 @@ HTML_TEMPLATE = r"""<!doctype html>
       const list = $('slot-list');
       const query = filterInput.value.trim().toLowerCase();
       list.innerHTML = '';
-      const visible = state.slots.filter((slot) => `${slot.google_id_masked} ${slot.api_key_name}`.toLowerCase().includes(query));
+      const visible = state.slots.filter((slot) => `${slot.google_id_masked} ${slot.api_key_name} ${slot.api_key_fingerprint} ${slot.rotation_state}`.toLowerCase().includes(query));
       $('slot-count').textContent = `${visible.length}/${state.slot_count} visible`;
       $('empty-state').hidden = visible.length !== 0;
       for (const slot of visible) {
@@ -403,10 +407,16 @@ HTML_TEMPLATE = r"""<!doctype html>
         const keyName = document.createElement('div');
         keyName.className = 'small';
         keyName.textContent = slot.api_key_name;
-        details.append(identity, keyName);
+        const keyDetail = document.createElement('div');
+        keyDetail.className = 'key-detail';
+        keyDetail.textContent = `Key ${slot.api_key_masked} · ${slot.api_key_length} chars`;
+        const fingerprint = document.createElement('div');
+        fingerprint.className = 'key-fingerprint';
+        fingerprint.textContent = `Fingerprint ${slot.api_key_fingerprint}`;
+        details.append(identity, keyName, keyDetail, fingerprint);
         const status = document.createElement('div');
         status.className = 'slot-status';
-        status.textContent = slot.slot === state.active_slot ? 'active' : 'queued';
+        status.textContent = slot.rotation_state;
         row.append(details, status);
         list.appendChild(row);
       }
@@ -421,6 +431,7 @@ HTML_TEMPLATE = r"""<!doctype html>
       $('next-token').textContent = state.next_api_key_masked;
       $('next-switch').textContent = state.next_switch_label;
       $('interval-label').textContent = `${state.interval_seconds}s`;
+      $('usage-label').textContent = state.usage_mode === 'local-rotation-only' ? 'local only' : state.usage_mode;
       $('model-status').textContent = state.status.toUpperCase();
       renderSlots();
     }

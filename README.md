@@ -108,7 +108,12 @@ the web dashboard and reports the reason on stderr.
 
 The web dashboard adds a live connection indicator, light/dark theme toggle,
 slot filtering, keyboard shortcuts (`R` refresh and `T` theme), and a `/healthz`
-endpoint for process monitors.
+endpoint for process monitors. Each configured key is shown only as a masked
+value plus length and a short non-reversible fingerprint.
+
+ggtmoni reports local rotation state (`active`, `next`, or `queued`). It does
+not call Google APIs or collect provider quota/usage telemetry, so no frontend
+can claim live Google usage from this application alone.
 
 ### Terminal monitor
 
