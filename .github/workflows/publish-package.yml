@@ -1,0 +1,50 @@
+name: Publish Python Package
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      tag_name:
+        description: "Tag to package, for example v1.0.0"
+        required: true
+        default: "v1.0.0"
+        type: string
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  publish-python-package:
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      - name: Checkout release tag
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.tag_name || github.ref }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ vars.PYTHON_VERSION }}
+
+      - name: Build package
+        shell: bash
+        run: |
+          python -m pip install --upgrade build twine
+          python -m build
+          python -m twine check dist/*
+
+      - name: Publish to GitHub Packages
+        shell: bash
+        env:
+          TWINE_USERNAME: ${{ github.actor }}
+          TWINE_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
+        run: >-
+          python -m twine upload
+          --repository-url https://pypi.pkg.github.com/${{ github.repository_owner }}
+          dist/*
