@@ -19,6 +19,7 @@ on:
 jobs:
   build-windows-gui:
     runs-on: windows-latest
+    environment: production
 
     steps:
       - name: Checkout
@@ -27,7 +28,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
+          python-version: ${{ vars.PYTHON_VERSION }}
 
       - name: Install build tools
         shell: pwsh
