@@ -14,7 +14,7 @@ on:
 
 permissions:
   contents: read
-  packages: write
+  id-token: write
 
 jobs:
   publish-python-package:
@@ -39,12 +39,7 @@ jobs:
           python -m build
           python -m twine check dist/*
 
-      - name: Publish to GitHub Packages
-        shell: bash
-        env:
-          TWINE_USERNAME: ${{ github.actor }}
-          TWINE_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
-        run: >-
-          python -m twine upload
-          --repository-url https://pypi.pkg.github.com/${{ github.repository_owner }}
-          dist/*
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          packages-dir: dist/
