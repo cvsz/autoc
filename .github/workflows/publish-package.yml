@@ -27,7 +27,7 @@ jobs:
           ref: ${{ inputs.tag_name || github.ref }}
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v7
         with:
           python-version: ${{ vars.PYTHON_VERSION }}
 
