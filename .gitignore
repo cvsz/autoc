@@ -1,8 +1,47 @@
+```
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+build/
+.next/
+out/
+
+# Environment variables
 .env
-.venv/
+.env.local
+.env.*
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+
+# Python cache
 __pycache__/
 *.pyc
 *.pyo
-*.egg-info/
-build/
-dist/
+*.pyd
+
+# Coverage reports
+coverage/
+htmlcov/
+.coverage
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Package manager caches
+.npm/
+.yarn/
+.pnpm-store/
+```
