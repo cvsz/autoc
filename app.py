@@ -565,6 +565,24 @@ class Handler(BaseHTTPRequestHandler):
             self._send_json({"status": "ok", "slot_count": len(self.server.model.slots)})
             return
 
+        if parsed.path == "/metrics":
+            # Basic Prometheus metrics
+            state = self.server.model.snapshot()
+            metrics = [
+                "# HELP autoc_slot_count Total number of slots configured",
+                "# TYPE autoc_slot_count gauge",
+                f"autoc_slot_count {state['slot_count']}",
+                "# HELP autoc_active_slot The current active slot index",
+                "# TYPE autoc_active_slot gauge",
+                f"autoc_active_slot {state['active_slot']}",
+                "# HELP autoc_next_switch_seconds Seconds until next slot switch",
+                "# TYPE autoc_next_switch_seconds gauge",
+                f"autoc_next_switch_seconds {max(0, (state['next_switch_at_ms'] - int(time.time() * 1000)) / 1000.0)}"
+            ]
+            body = "\n".join(metrics) + "\n"
+            self._send(HTTPStatus.OK, "text/plain; version=0.0.4; charset=utf-8", body.encode("utf-8"))
+            return
+
         if parsed.path == "/events":
             self.send_response(HTTPStatus.OK)
             self.send_header("Content-Type", "text/event-stream; charset=utf-8")

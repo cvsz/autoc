@@ -1,0 +1,16 @@
+[Unit]
+Description=autoc Realtime Monitor
+After=network.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/opt/autoc
+ExecStart=/opt/autoc/.venv/bin/autoc-web --host 127.0.0.1 --port 8000
+Restart=always
+RestartSec=5
+Environment="DASHBOARD_AUTH="
+Environment="ENABLE_HTTPS=0"
+
+[Install]
+WantedBy=multi-user.target
