@@ -52,10 +52,10 @@
 
 เนื่องจากไม่สามารถ Push ขึ้น GitHub โดยตรงได้ ขอแนะนำให้ดำเนินการดังนี้:
 
-1.  **คัดลอกเนื้อหา** จากสรุปด้านบน หรือเปิดไฟล์ `ZAAPI_COMPLETE_RELEASE_PLAN.md` ในเครื่อง
+1.  **คัดลอกเนื้อหา** จากสรุปด้านบน หรือเปิดไฟล์ `ZOK_COMPLETE_RELEASE_PLAN.md` ในเครื่อง
 2.  **สร้าง Branch ใหม่** ในเครื่องของคุณ: `git checkout -b feature/final-release-plan`
 3.  **Commit การเปลี่ยนแปลง:** `git add . && git commit -m "feat: Add complete final release plan and gap analysis"`
 4.  **Push ด้วยตนเอง:** `git push origin feature/final-release-plan`
 5.  **สร้าง Pull Request** บน GitHub เพื่อตรวจสอบและ Merge เข้าสู่ Main
 
-แผนงานนี้พร้อมนำไปปฏิบัติได้ทันทีเพื่อยกระดับ Zaapi สู่ความเป็นแพลตฟอร์มระดับ Enterprise อย่างเต็มตัว
+แผนงานนี้พร้อมนำไปปฏิบัติได้ทันทีเพื่อยกระดับ zOK สู่ความเป็นแพลตฟอร์มระดับ Enterprise อย่างเต็มตัว
