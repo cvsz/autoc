@@ -122,9 +122,9 @@ Through deep code analysis, we uncovered these **undocumented capabilities**:
 | EXT-003 | Add Prometheus metrics endpoint | LOW | MEDIUM | 🟠 P1 |
 | EXT-004 | Create systemd service file | LOW | MEDIUM | 🟠 P1 |
 | EXT-005 | Add Docker containerization | MEDIUM | HIGH | 🟠 P1 |
-| EXT-006 | Implement rate limiting for Gemini CLI | LOW | MEDIUM | 🟡 P2 |
-| EXT-007 | Add multi-model support (Gemini Pro/Flash/Ultra) | LOW | MEDIUM | 🟡 P2 |
-| EXT-008 | Create configuration GUI for .env management | MEDIUM | HIGH | 🟡 P2 |
+| EXT-006 | Implement rate limiting for Gemini CLI | LOW | MEDIUM | 🟢 DONE |
+| EXT-007 | Add multi-model support (Gemini Pro/Flash/Ultra) | LOW | MEDIUM | 🟢 DONE |
+| EXT-008 | Create configuration GUI for .env management | MEDIUM | HIGH | 🟢 DONE |
 
 ### 2.2 Medium-Term Extensions (Week 5-12)
 

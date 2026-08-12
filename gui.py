@@ -143,6 +143,7 @@ class MonitorGUI:
         controls = ttk.Frame(header, style="Panel.TFrame")
         controls.pack(anchor="e", pady=(12, 0))
         ttk.Label(controls, text="● LIVE", style="Accent.TLabel").pack(side="left", padx=(0, 18))
+        ttk.Button(controls, text="Edit Config", command=self.edit_config).pack(side="left", padx=(0, 10))
         ttk.Button(controls, text="Refresh now", command=self.refresh_from_disk).pack(side="left", padx=(0, 10))
         ttk.Button(controls, text="Reset timer", command=self.reset_timer).pack(side="left")
 
@@ -352,6 +353,35 @@ class MonitorGUI:
     def reset_timer(self) -> None:
         self.model = CountdownModel(self.model.slots, self.model.interval)
         self._refresh_state()
+
+    def edit_config(self) -> None:
+        if not TK_AVAILABLE:
+            return
+        from tkinter import Toplevel, Text
+        top = Toplevel(self.root)
+        top.title("Edit Configuration (.env)")
+        top.geometry("600x400")
+        top.configure(bg=self.theme.bg)
+        
+        text_area = Text(top, bg=self.theme.panel, fg=self.theme.text, insertbackground=self.theme.text, font=("Courier New", 12))
+        text_area.pack(fill=BOTH, expand=True, padx=10, pady=10)
+        
+        try:
+            with open(self.env_path, "r", encoding="utf-8") as f:
+                content = f.read()
+            text_area.insert(END, content)
+        except Exception:
+            pass
+            
+        def save():
+            new_content = text_area.get("1.0", END)
+            with open(self.env_path, "w", encoding="utf-8") as f:
+                f.write(new_content)
+            top.destroy()
+            self.refresh_from_disk()
+            
+        save_btn = ttk.Button(top, text="Save & Reload", command=save)
+        save_btn.pack(pady=(0, 10))
 
     def _tick(self) -> None:
         try:

@@ -13,6 +13,8 @@ from prompt_toolkit import PromptSession
 from prompt_toolkit.history import FileHistory
 from prompt_toolkit.auto_suggest import AutoSuggestFromHistory
 from dotenv import load_dotenv
+import time
+import argparse
 
 # Load environment variables from .env file
 load_dotenv()
@@ -38,10 +40,21 @@ def setup_gemini():
         sys.exit(1)
 
 def main():
+    parser = argparse.ArgumentParser(description="Gemini CLI")
+    parser.add_argument("--model", default="gemini-2.0-flash-exp", help="Model to use (gemini-2.0-flash-exp, gemini-pro, gemini-ultra)")
+    parser.add_argument("--rpm", type=int, default=15, help="Requests per minute limit")
+    args = parser.parse_args()
+    
+    current_model = args.model
+    rpm_limit = args.rpm
+    request_timestamps = []
+
     print("🚀 Gemini CLI - Powered by Google Gemini AI")
     print("=" * 50)
+    print(f"Model: {current_model} | Rate limit: {rpm_limit} RPM")
     print("Type 'quit' or 'exit' to end the session")
     print("Type 'clear' to clear the conversation history")
+    print("Type '/model <name>' to switch models")
     print("=" * 50 + "\n")
     
     # Initialize Gemini
@@ -76,13 +89,30 @@ def main():
                 print("\n🧹 Conversation history cleared.\n")
                 continue
             
+            if user_input.startswith('/model '):
+                new_model = user_input.split(' ', 1)[1].strip()
+                if new_model:
+                    current_model = new_model
+                    print(f"\n🔄 Switched to model: {current_model}\n")
+                continue
+
+            # Rate Limiting
+            now = time.time()
+            request_timestamps = [ts for ts in request_timestamps if now - ts < 60]
+            if len(request_timestamps) >= rpm_limit:
+                sleep_time = 60 - (now - request_timestamps[0])
+                print(f"\n⚠️  Rate limit reached ({rpm_limit} RPM). Waiting {sleep_time:.1f}s...\n")
+                time.sleep(sleep_time)
+                now = time.time()
+            request_timestamps.append(now)
+            
             # Send message to Gemini
             print("\n🤖 Gemini: ", end="", flush=True)
             
             try:
                 # Generate content with conversation history
                 response = client.models.generate_content(
-                    model='gemini-2.0-flash-exp',
+                    model=current_model,
                     contents=user_input
                 )
                 print(response.text)
