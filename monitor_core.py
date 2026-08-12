@@ -120,6 +120,8 @@ def mask_email(value: str) -> str:
 
 
 class CountdownModel:
+    __slots__ = ('slots', 'interval', 'started_at')
+    
     def __init__(self, slots: List[Slot], interval: float) -> None:
         if interval <= 0:
             raise ValueError("interval must be greater than zero")
@@ -187,6 +189,8 @@ class CountdownModel:
 
 
 class ReloadingCountdownModel:
+    __slots__ = ('env_path', 'interval', '_lock', '_mtime', '_model', '_slots')
+    
     def __init__(self, env_path: Path, interval: float) -> None:
         self.env_path = Path(env_path)
         self.interval = interval
