@@ -184,7 +184,7 @@ operations.
 
 ## Web application
 
-The repository also contains the web application under `zaapi-clone/` while the
+The repository also contains the web application under `autoc-clone/` while the
 legacy folder name is being retired. Product branding and package identity are
 being migrated from autoc to `autoc` as part of the repository-wide rebrand.
 

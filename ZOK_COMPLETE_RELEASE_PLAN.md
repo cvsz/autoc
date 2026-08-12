@@ -31,7 +31,7 @@
 
 ### 🎓 Pillar 5: Education Ecosystem
 
--   **Zaapi Academy:** คอร์สเรียนออนไลน์พร้อมใบรับรอง
+-   **Autoc Academy:** คอร์สเรียนออนไลน์พร้อมใบรับรอง
 -   **Template Marketplace:** ตลาดซื้อขายเทมเพลตแชทบอทและข้อความ
 -   **Interactive Wizard:** คู่มือตั้งค่าอัตโนมัติเมื่อเริ่มใช้งาน (แก้โจทย์หน้า Empty State)
 
