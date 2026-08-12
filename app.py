@@ -656,6 +656,23 @@ class Handler(BaseHTTPRequestHandler):
                 return
             return
 
+        # Feature API endpoints
+        if parsed.path == "/api/helpdesk":
+            self._send_json({"status": "ok", "module": "helpdesk", "messages": []})
+            return
+        if parsed.path == "/api/automations":
+            self._send_json({"status": "ok", "module": "automations", "flows": []})
+            return
+        if parsed.path == "/api/analytics":
+            self._send_json({"status": "ok", "module": "analytics", "metrics": {"visitors": 0, "csat": 5.0}})
+            return
+        if parsed.path == "/api/broadcast":
+            self._send_json({"status": "ok", "module": "broadcast", "campaigns": []})
+            return
+        if parsed.path == "/api/aiagent":
+            self._send_json({"status": "ok", "module": "aiagent", "config": {"mode": "auto", "language": "en"}})
+            return
+
         self.send_error(HTTPStatus.NOT_FOUND, "Not found")
 
     def log_message(self, fmt: str, *args) -> None:  # noqa: A003

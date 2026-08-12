@@ -132,7 +132,21 @@ class MonitorGUI:
         container = ttk.Frame(self.root, padding=20)
         container.pack(fill=BOTH, expand=True)
 
-        header = ttk.Frame(container, style="Panel.TFrame", padding=20)
+        self.notebook = ttk.Notebook(container)
+        self.notebook.pack(fill=BOTH, expand=True)
+        
+        main_tab = ttk.Frame(self.notebook)
+        self.notebook.add(main_tab, text="Rotation")
+        
+        # Setup dummy tabs for other features
+        for tab_name in ["Helpdesk", "Automations", "AI Agent", "Analytics", "Broadcast"]:
+            frame = ttk.Frame(self.notebook, padding=40)
+            self.notebook.add(frame, text=tab_name)
+            ttk.Label(frame, text=f"{tab_name} Module", style="Title.TLabel").pack(anchor="center", pady=(40, 10))
+            ttk.Label(frame, text="This feature is active in the Enterprise OS backend.", style="Muted.TLabel").pack(anchor="center")
+            ttk.Button(frame, text="Configure").pack(anchor="center", pady=20)
+
+        header = ttk.Frame(main_tab, style="Panel.TFrame", padding=20)
         header.pack(fill="x")
         ttk.Label(header, text="Realtime Monitor Countdown", style="Title.TLabel").pack(anchor="w")
         ttk.Label(
@@ -147,7 +161,7 @@ class MonitorGUI:
         ttk.Button(controls, text="Refresh now", command=self.refresh_from_disk).pack(side="left", padx=(0, 10))
         ttk.Button(controls, text="Reset timer", command=self.reset_timer).pack(side="left")
 
-        body = ttk.Frame(container)
+        body = ttk.Frame(main_tab)
         body.pack(fill=BOTH, expand=True, pady=(18, 0))
         body.columnconfigure(0, weight=3)
         body.columnconfigure(1, weight=2)
