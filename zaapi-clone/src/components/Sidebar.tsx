@@ -49,8 +49,8 @@ export default function Sidebar({ trialDaysRemaining }: SidebarProps) {
       {/* Mobile menu button */}
       <div className="lg:hidden fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between">
         <div className="flex items-center space-x-3">
-          <img src="/images/favicon.png" alt="Zaapi" className="h-8 w-8" />
-          <span className="font-semibold text-lg">Zaapi</span>
+          <img src="/images/favicon.png" alt="autoc" className="h-8 w-8" />
+          <span className="font-semibold text-lg">autoc</span>
         </div>
         <button
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -85,8 +85,8 @@ export default function Sidebar({ trialDaysRemaining }: SidebarProps) {
         {/* Logo */}
         <div className="px-6 py-4 border-b border-gray-100 hidden lg:block">
           <Link href="/th/dashboard" className="flex items-center space-x-3">
-            <img src="/images/favicon.png" alt="Zaapi" className="h-8 w-8" />
-            <span className="font-semibold text-xl">Zaapi</span>
+            <img src="/images/favicon.png" alt="autoc" className="h-8 w-8" />
+            <span className="font-semibold text-xl">autoc</span>
           </Link>
         </div>
 
@@ -130,12 +130,11 @@ export default function Sidebar({ trialDaysRemaining }: SidebarProps) {
         {/* Help section */}
         <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-100 bg-white">
           <Link
-            href="https://help.zaapi.com"
-            target="_blank"
+            href="/th/settings"
             className="flex items-center space-x-2 text-sm text-gray-600 hover:text-gray-900"
           >
             <HelpCircle size={18} />
-            <span>ศูนย์ช่วยเหลือ</span>
+            <span>ศูนย์ช่วยเหลือ autoc</span>
           </Link>
         </div>
       </aside>
