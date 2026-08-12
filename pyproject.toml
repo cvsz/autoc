@@ -3,7 +3,7 @@ requires = ["setuptools>=64"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "ggtmoni"
+name = "autoc"
 version = "1.0.0"
 description = "Realtime monitor countdown for Google identity rotation"
 readme = "README.md"
@@ -21,19 +21,19 @@ classifiers = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/cvsz/ggtmoni"
-Documentation = "https://github.com/cvsz/ggtmoni#readme"
-Issues = "https://github.com/cvsz/ggtmoni/issues"
-Changelog = "https://github.com/cvsz/ggtmoni/blob/main/CHANGELOG.md"
+Homepage = "https://github.com/cvsz/autoc"
+Documentation = "https://github.com/cvsz/autoc#readme"
+Issues = "https://github.com/cvsz/autoc/issues"
+Changelog = "https://github.com/cvsz/autoc/blob/main/CHANGELOG.md"
 
 [project.optional-dependencies]
 build = ["pyinstaller>=6.0"]
 
 [project.scripts]
-ggtmoni = "app:main"
-ggtmoni-web = "app:main"
-ggtmoni-gui = "gui:main"
-ggtmoni-term = "realtime_monitor:main"
+autoc = "app:main"
+autoc-web = "app:main"
+autoc-gui = "gui:main"
+autoc-term = "realtime_monitor:main"
 
 [tool.setuptools]
 py-modules = ["app", "gui", "monitor_core", "realtime_monitor"]
