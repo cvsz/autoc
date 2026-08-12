@@ -1,4 +1,4 @@
-# 🚀 Zaapi Final Release Plan: Conversational Commerce OS
+# 🚀 zOK Final Release Plan: Conversational Commerce OS
 
 **สถานะ:** อนุมัติให้ดำเนินการ (Approved for Execution) **เป้าหมาย:** ปล่อยรุ่น Gold Master ภายใน 17 สัปดาห์
 
