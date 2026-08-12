@@ -1,3 +1,9 @@
 ```
 .env
 ```
+# Build artifacts
+__pycache__/
+*.pyc
+build/
+dist/
+*.egg-info/
