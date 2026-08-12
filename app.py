@@ -18,6 +18,7 @@ import base64
 import ssl
 
 from monitor_core import ReloadingCountdownModel, default_env_path
+import autoc_db
 
 
 HTML_TEMPLATE = r"""<!doctype html>
@@ -658,16 +659,16 @@ class Handler(BaseHTTPRequestHandler):
 
         # Feature API endpoints
         if parsed.path == "/api/helpdesk":
-            self._send_json({"status": "ok", "module": "helpdesk", "messages": []})
+            self._send_json({"status": "ok", "module": "helpdesk", "messages": autoc_db.get_helpdesk_messages()})
             return
         if parsed.path == "/api/automations":
-            self._send_json({"status": "ok", "module": "automations", "flows": []})
+            self._send_json({"status": "ok", "module": "automations", "flows": autoc_db.get_automations()})
             return
         if parsed.path == "/api/analytics":
-            self._send_json({"status": "ok", "module": "analytics", "metrics": {"visitors": 0, "csat": 5.0}})
+            self._send_json({"status": "ok", "module": "analytics", "metrics": autoc_db.get_analytics()})
             return
         if parsed.path == "/api/broadcast":
-            self._send_json({"status": "ok", "module": "broadcast", "campaigns": []})
+            self._send_json({"status": "ok", "module": "broadcast", "campaigns": autoc_db.get_broadcasts()})
             return
         if parsed.path == "/api/aiagent":
             self._send_json({"status": "ok", "module": "aiagent", "config": {"mode": "auto", "language": "en"}})
