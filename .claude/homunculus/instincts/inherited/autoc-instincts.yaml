@@ -1,19 +1,19 @@
-# Instincts generated from https://github.com/cvsz/ggtmoni
+# Instincts generated from https://github.com/cvsz/autoc
 # Generated: 2026-08-10T08:38:31.859Z
 # Version: 2.0
 # NOTE: This file supplements (does not replace) any existing curated instincts.
 # High-confidence manually curated instincts should be preserved alongside these.
 
 ---
-id: ggtmoni-commit-length
+id: autoc-commit-length
 trigger: "when writing a commit message"
 confidence: 0.6
 domain: git
 source: repo-analysis
-source_repo: https://github.com/cvsz/ggtmoni
+source_repo: https://github.com/cvsz/autoc
 ---
 
-# Ggtmoni Commit Length
+# Autoc Commit Length
 
 ## Action
 
@@ -25,15 +25,15 @@ Keep commit messages concise (~39 characters)
 - Based on 1 commits
 
 ---
-id: ggtmoni-naming-files
+id: autoc-naming-files
 trigger: "when creating a new file"
 confidence: 0.8
 domain: code-style
 source: repo-analysis
-source_repo: https://github.com/cvsz/ggtmoni
+source_repo: https://github.com/cvsz/autoc
 ---
 
-# Ggtmoni Naming Files
+# Autoc Naming Files
 
 ## Action
 
@@ -45,15 +45,15 @@ Use camelCase naming convention
 - Dominant pattern: camelCase
 
 ---
-id: ggtmoni-import-relative
+id: autoc-import-relative
 trigger: "when importing modules"
 confidence: 0.75
 domain: code-style
 source: repo-analysis
-source_repo: https://github.com/cvsz/ggtmoni
+source_repo: https://github.com/cvsz/autoc
 ---
 
-# Ggtmoni Import Relative
+# Autoc Import Relative
 
 ## Action
 
@@ -65,15 +65,15 @@ Use relative imports for project files
 - Example: import { x } from '../lib/x'
 
 ---
-id: ggtmoni-export-style
+id: autoc-export-style
 trigger: "when exporting from a module"
 confidence: 0.7
 domain: code-style
 source: repo-analysis
-source_repo: https://github.com/cvsz/ggtmoni
+source_repo: https://github.com/cvsz/autoc
 ---
 
-# Ggtmoni Export Style
+# Autoc Export Style
 
 ## Action
 
@@ -85,15 +85,15 @@ Prefer named exports
 - Dominant style: named
 
 ---
-id: ggtmoni-test-separate
+id: autoc-test-separate
 trigger: "when writing tests"
 confidence: 0.8
 domain: testing
 source: repo-analysis
-source_repo: https://github.com/cvsz/ggtmoni
+source_repo: https://github.com/cvsz/autoc
 ---
 
-# Ggtmoni Test Separate
+# Autoc Test Separate
 
 ## Action
 

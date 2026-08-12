@@ -3,7 +3,7 @@
   "schemaVersion": "1.0",
   "generatedBy": "ecc-tools",
   "generatedAt": "2026-08-10T08:38:29.660Z",
-  "repo": "https://github.com/cvsz/ggtmoni",
+  "repo": "https://github.com/cvsz/autoc",
   "referenceSetReadiness": {
     "score": 0,
     "present": 0,
@@ -120,59 +120,59 @@
     "runtime-core"
   ],
   "managedFiles": [
-    ".claude/skills/ggtmoni/SKILL.md",
-    ".agents/skills/ggtmoni/SKILL.md",
-    ".agents/skills/ggtmoni/agents/openai.yaml",
+    ".claude/skills/autoc/SKILL.md",
+    ".agents/skills/autoc/SKILL.md",
+    ".agents/skills/autoc/agents/openai.yaml",
     ".claude/identity.json",
     ".codex/config.toml",
     ".codex/AGENTS.md",
     ".codex/agents/explorer.toml",
     ".codex/agents/reviewer.toml",
     ".codex/agents/docs-researcher.toml",
-    ".claude/homunculus/instincts/inherited/ggtmoni-instincts.yaml"
+    ".claude/homunculus/instincts/inherited/autoc-instincts.yaml"
   ],
   "packageFiles": {
     "runtime-core": [
-      ".claude/skills/ggtmoni/SKILL.md",
-      ".agents/skills/ggtmoni/SKILL.md",
-      ".agents/skills/ggtmoni/agents/openai.yaml",
+      ".claude/skills/autoc/SKILL.md",
+      ".agents/skills/autoc/SKILL.md",
+      ".agents/skills/autoc/agents/openai.yaml",
       ".claude/identity.json",
       ".codex/config.toml",
       ".codex/AGENTS.md",
       ".codex/agents/explorer.toml",
       ".codex/agents/reviewer.toml",
       ".codex/agents/docs-researcher.toml",
-      ".claude/homunculus/instincts/inherited/ggtmoni-instincts.yaml"
+      ".claude/homunculus/instincts/inherited/autoc-instincts.yaml"
     ]
   },
   "moduleFiles": {
     "runtime-core": [
-      ".claude/skills/ggtmoni/SKILL.md",
-      ".agents/skills/ggtmoni/SKILL.md",
-      ".agents/skills/ggtmoni/agents/openai.yaml",
+      ".claude/skills/autoc/SKILL.md",
+      ".agents/skills/autoc/SKILL.md",
+      ".agents/skills/autoc/agents/openai.yaml",
       ".claude/identity.json",
       ".codex/config.toml",
       ".codex/AGENTS.md",
       ".codex/agents/explorer.toml",
       ".codex/agents/reviewer.toml",
       ".codex/agents/docs-researcher.toml",
-      ".claude/homunculus/instincts/inherited/ggtmoni-instincts.yaml"
+      ".claude/homunculus/instincts/inherited/autoc-instincts.yaml"
     ]
   },
   "files": [
     {
       "moduleId": "runtime-core",
-      "path": ".claude/skills/ggtmoni/SKILL.md",
+      "path": ".claude/skills/autoc/SKILL.md",
       "description": "Repository-specific Claude Code skill generated from git history."
     },
     {
       "moduleId": "runtime-core",
-      "path": ".agents/skills/ggtmoni/SKILL.md",
+      "path": ".agents/skills/autoc/SKILL.md",
       "description": "Codex-facing copy of the generated repository skill."
     },
     {
       "moduleId": "runtime-core",
-      "path": ".agents/skills/ggtmoni/agents/openai.yaml",
+      "path": ".agents/skills/autoc/agents/openai.yaml",
       "description": "Codex skill metadata so the repo skill appears cleanly in the skill interface."
     },
     {
@@ -207,21 +207,21 @@
     },
     {
       "moduleId": "runtime-core",
-      "path": ".claude/homunculus/instincts/inherited/ggtmoni-instincts.yaml",
+      "path": ".claude/homunculus/instincts/inherited/autoc-instincts.yaml",
       "description": "Continuous-learning instincts derived from repository patterns."
     }
   ],
   "workflows": [],
   "adapters": {
     "claudeCode": {
-      "skillPath": ".claude/skills/ggtmoni/SKILL.md",
+      "skillPath": ".claude/skills/autoc/SKILL.md",
       "identityPath": ".claude/identity.json",
       "commandPaths": []
     },
     "codex": {
       "configPath": ".codex/config.toml",
       "agentsGuidePath": ".codex/AGENTS.md",
-      "skillPath": ".agents/skills/ggtmoni/SKILL.md"
+      "skillPath": ".agents/skills/autoc/SKILL.md"
     }
   }
 }

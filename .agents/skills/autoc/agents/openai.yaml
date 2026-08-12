@@ -1,0 +1,6 @@
+interface:
+  display_name: "Autoc"
+  short_description: "Repo-specific patterns and workflows for autoc"
+  default_prompt: "Use the autoc repo skill to follow existing architecture, testing, and workflow conventions."
+policy:
+  allow_implicit_invocation: true

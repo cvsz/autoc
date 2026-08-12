@@ -1,15 +1,15 @@
 ---
-name: ggtmoni-conventions
-description: Development conventions and patterns for ggtmoni. TypeScript project with freeform commits.
+name: autoc-conventions
+description: Development conventions and patterns for autoc. TypeScript project with freeform commits.
 ---
 
-# Ggtmoni Conventions
+# Autoc Conventions
 
-> Generated from [cvsz/ggtmoni](https://github.com/cvsz/ggtmoni) on 2026-08-10
+> Generated from [cvsz/autoc](https://github.com/cvsz/autoc) on 2026-08-10
 
 ## Overview
 
-This skill teaches Claude the development patterns and conventions used in ggtmoni.
+This skill teaches Claude the development patterns and conventions used in autoc.
 
 ## Tech Stack
 
