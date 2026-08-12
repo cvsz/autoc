@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to ggtmoni are recorded here. The project follows a
+All notable changes to autoc are recorded here. The project follows a
 lightweight semantic-versioning style for published package and executable
 releases.
 

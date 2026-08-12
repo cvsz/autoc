@@ -2,7 +2,7 @@
 
 ## Scope
 
-ggtmoni reads Google identity and API-key values from a local `.env` file and
+autoc reads Google identity and API-key values from a local `.env` file and
 renders a rotating operational view. It does not authenticate users, encrypt
 the file, call Google APIs, or provide a secrets-management service.
 

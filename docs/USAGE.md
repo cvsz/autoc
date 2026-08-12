@@ -68,7 +68,7 @@ revealing it. The `rotation_state` is `active`, `next`, or `queued`.
 
 ### Usage-data boundary
 
-The inventory is configuration and local rotation telemetry. ggtmoni does not
+The inventory is configuration and local rotation telemetry. autoc does not
 make Google API requests, inspect Google quota counters, or collect request
 counts. Provider-side usage requires a separate authenticated integration and
 must not be added to the public dashboard without explicit access controls.

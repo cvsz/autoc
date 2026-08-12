@@ -23,11 +23,11 @@ New-Item -ItemType Directory -Force -Path $WorkPath | Out-Null
     --clean `
     --distpath $DistPath `
     --workpath $WorkPath `
-    "windows\ggtmoni-gui.spec"
+    "windows\autoc-gui.spec"
 
 Copy-Item ".env.example" (Join-Path $DistPath ".env.example") -Force
 
-$zipPath = Join-Path (Split-Path $DistPath -Parent) "ggtmoni-windows11-gui.zip"
+$zipPath = Join-Path (Split-Path $DistPath -Parent) "autoc-windows11-gui.zip"
 if (Test-Path $zipPath) {
     Remove-Item $zipPath -Force
 }

@@ -1,6 +1,6 @@
-# ggtmoni
+# autoc
 
-`ggtmoni` is a small, dependency-free Python monitor for rotating through
+`autoc` is a small, dependency-free Python monitor for rotating through
 ordered Google identity/API-key slots. It provides the same countdown model in
 three interfaces:
 
@@ -41,9 +41,9 @@ is already in use.
 The installed console commands are:
 
 ```bash
-ggtmoni                 # web dashboard
-ggtmoni-gui             # Tkinter GUI
-ggtmoni-term --once     # one terminal snapshot
+autoc                 # web dashboard
+autoc-gui             # Tkinter GUI
+autoc-term --once     # one terminal snapshot
 ```
 
 See [docs/USAGE.md](docs/USAGE.md) for all options and examples.
@@ -111,7 +111,7 @@ slot filtering, keyboard shortcuts (`R` refresh and `T` theme), and a `/healthz`
 endpoint for process monitors. Each configured key is shown only as a masked
 value plus length and a short non-reversible fingerprint.
 
-ggtmoni reports local rotation state (`active`, `next`, or `queued`). It does
+autoc reports local rotation state (`active`, `next`, or `queued`). It does
 not call Google APIs or collect provider quota/usage telemetry, so no frontend
 can claim live Google usage from this application alone.
 
@@ -153,9 +153,9 @@ powershell -ExecutionPolicy Bypass -File windows\build_gui.ps1
 
 The build creates:
 
-- `dist\windows\ggtmoni-gui.exe`
+- `dist\windows\autoc-gui.exe`
 - `dist\windows\.env.example`
-- `dist\ggtmoni-windows11-gui.zip`
+- `dist\autoc-windows11-gui.zip`
 
 Put a private `.env` beside the executable before starting it. Detailed
 packaging notes are in [windows/README.md](windows/README.md).

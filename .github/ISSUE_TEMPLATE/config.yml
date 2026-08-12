@@ -1,8 +1,8 @@
 blank_issues_enabled: false
 contact_links:
   - name: Security report
-    url: https://github.com/cvsz/ggtmoni/security
+    url: https://github.com/cvsz/autoc/security
     about: Report suspected vulnerabilities or exposed credentials privately.
   - name: Documentation and usage
-    url: https://github.com/cvsz/ggtmoni/blob/main/docs/USAGE.md
+    url: https://github.com/cvsz/autoc/blob/main/docs/USAGE.md
     about: Check the usage guide before opening a support issue.

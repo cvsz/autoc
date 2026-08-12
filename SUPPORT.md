@@ -3,7 +3,7 @@
 ## Before asking for help
 
 Check the [usage guide](docs/USAGE.md), [operations guide](docs/OPERATIONS.md),
-and recent [GitHub Actions runs](https://github.com/cvsz/ggtmoni/actions).
+and recent [GitHub Actions runs](https://github.com/cvsz/autoc/actions).
 Reproduce with placeholder credentials and collect the command, Python version,
 operating system, and sanitized error message.
 
