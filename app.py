@@ -107,7 +107,13 @@ HTML_TEMPLATE = r"""<!doctype html>
     }
     .brand strong { display: block; font-size: 0.98rem; }
     .brand small { display: block; color: var(--muted); font-size: 0.68rem; margin-top: 2px; }
+    .nav-links { display: flex; gap: 16px; margin: 0 20px; align-items: center; flex: 1; }
+    .nav-links a { color: var(--muted); text-decoration: none; font-size: 0.85rem; font-weight: bold; transition: color 0.2s; }
+    .nav-links a:hover, .nav-links a.active { color: var(--accent); }
     .header-actions { display: flex; align-items: center; gap: 9px; }
+    .tab-content { display: none; padding: 40px; min-height: 50vh; text-align: center; }
+    .tab-content h2 { color: var(--accent-2); font-size: 2rem; margin-bottom: 15px; }
+    .tab-content p { color: var(--muted); font-size: 1.1rem; line-height: 1.6; max-width: 600px; margin: 0 auto; }
     .icon-button {
       border: 1px solid var(--panel-border);
       border-radius: 12px;
@@ -300,14 +306,22 @@ HTML_TEMPLATE = r"""<!doctype html>
   <div class="shell">
     <main class="card" id="card">
       <div class="topbar">
-        <div class="brand"><span class="brand-mark">G</span><span><strong>autoc</strong><small>rotation control room</small></span></div>
+        <div class="brand"><span class="brand-mark">G</span><span><strong>autoc</strong><small>enterprise os</small></span></div>
+        <nav class="nav-links">
+          <a href="#" class="nav-tab active" onclick="showTab('dashboard')">Rotation</a>
+          <a href="#" class="nav-tab" onclick="showTab('helpdesk')">Helpdesk</a>
+          <a href="#" class="nav-tab" onclick="showTab('automations')">Automations</a>
+          <a href="#" class="nav-tab" onclick="showTab('aiagent')">AI Agent</a>
+          <a href="#" class="nav-tab" onclick="showTab('analytics')">Analytics</a>
+          <a href="#" class="nav-tab" onclick="showTab('broadcast')">Broadcast</a>
+        </nav>
         <div class="header-actions">
           <div class="badge connection-badge syncing" id="status-badge" aria-live="polite"><span class="dot"></span><span id="status-text">connecting</span></div>
           <button class="icon-button" id="refresh-button" type="button" title="Refresh state (R)">↻ Refresh</button>
           <button class="icon-button" id="theme-toggle" type="button" title="Toggle theme">☼ Theme</button>
         </div>
       </div>
-      <div class="content">
+      <div class="content" id="dashboard-tab">
         <section class="hero">
           <div class="hero-copy">
             <div>
@@ -371,6 +385,33 @@ HTML_TEMPLATE = r"""<!doctype html>
           </section>
         </aside>
       </div>
+      
+      <!-- Feature Tabs -->
+      <div class="tab-content" id="helpdesk-tab">
+        <h2>Universal Helpdesk Inbox</h2>
+        <p>Centralize every interaction from WhatsApp, FB Messenger, IG, LINE, Shopee, and Shopify.</p>
+        <br/><button class="icon-button">Open Inbox</button>
+      </div>
+      <div class="tab-content" id="automations-tab">
+        <h2>Visual Flow Builder</h2>
+        <p>Drag-and-drop interface to build complex, multi-step chat workflows without code.</p>
+        <br/><button class="icon-button">Create Flow</button>
+      </div>
+      <div class="tab-content" id="aiagent-tab">
+        <h2>Gemini AI Assistant</h2>
+        <p>AI agent that ingests knowledge bases and naturally responds in English, Thai, and Spanish.</p>
+        <br/><button class="icon-button">Configure AI</button>
+      </div>
+      <div class="tab-content" id="analytics-tab">
+        <h2>Advanced Analytics Dashboard</h2>
+        <p>Track resolution times, CSAT scores, and revenue attribution down to the exact chat.</p>
+        <br/><button class="icon-button">View Reports</button>
+      </div>
+      <div class="tab-content" id="broadcast-tab">
+        <h2>Rich Media Broadcasts</h2>
+        <p>Send segmented campaigns via WhatsApp and LINE with dynamic product carousels.</p>
+        <br/><button class="icon-button">New Campaign</button>
+      </div>
     </main>
   </div>
   <script id="bootstrap" type="application/json">__BOOTSTRAP__</script>
@@ -389,6 +430,20 @@ HTML_TEMPLATE = r"""<!doctype html>
     let state = bootstrap;
     let connectionState = 'syncing';
     let lastSyncAt = null;
+
+    function showTab(tabId) {
+      document.getElementById('dashboard-tab').style.display = 'none';
+      document.querySelectorAll('.tab-content').forEach(el => el.style.display = 'none');
+      
+      document.querySelectorAll('.nav-tab').forEach(el => el.classList.remove('active'));
+      event.target.classList.add('active');
+      
+      if(tabId === 'dashboard') {
+        document.getElementById('dashboard-tab').style.display = 'grid';
+      } else {
+        document.getElementById(tabId + '-tab').style.display = 'block';
+      }
+    }
 
     function renderSlots() {
       const list = $('slot-list');
