@@ -387,35 +387,39 @@ HTML_TEMPLATE = r"""<!doctype html>
         </aside>
       </div>
       
-      <!-- Feature Tabs -->
       <div class="tab-content" id="helpdesk-tab">
         <h2>Universal Helpdesk Inbox</h2>
         <p>Centralize every interaction from WhatsApp, FB Messenger, IG, LINE, Shopee, and Shopify.</p>
-        <br/><button class="icon-button">Open Inbox</button>
+        <div id="helpdesk-data" class="data-container"></div>
       </div>
       <div class="tab-content" id="automations-tab">
         <h2>Visual Flow Builder</h2>
         <p>Drag-and-drop interface to build complex, multi-step chat workflows without code.</p>
-        <br/><button class="icon-button">Create Flow</button>
+        <div id="automations-data" class="data-container"></div>
       </div>
       <div class="tab-content" id="aiagent-tab">
         <h2>Gemini AI Assistant</h2>
         <p>AI agent that ingests knowledge bases and naturally responds in English, Thai, and Spanish.</p>
-        <br/><button class="icon-button">Configure AI</button>
+        <div id="aiagent-data" class="data-container"></div>
       </div>
       <div class="tab-content" id="analytics-tab">
         <h2>Advanced Analytics Dashboard</h2>
         <p>Track resolution times, CSAT scores, and revenue attribution down to the exact chat.</p>
-        <br/><button class="icon-button">View Reports</button>
+        <div id="analytics-data" class="data-container"></div>
       </div>
       <div class="tab-content" id="broadcast-tab">
         <h2>Rich Media Broadcasts</h2>
         <p>Send segmented campaigns via WhatsApp and LINE with dynamic product carousels.</p>
-        <br/><button class="icon-button">New Campaign</button>
+        <div id="broadcast-data" class="data-container"></div>
       </div>
     </main>
   </div>
   <script id="bootstrap" type="application/json">__BOOTSTRAP__</script>
+  <style>
+    .data-container { margin-top: 20px; text-align: left; max-width: 800px; margin-left: auto; margin-right: auto; }
+    .data-row { background: rgba(255,255,255,0.05); padding: 15px; border-radius: 12px; margin-bottom: 10px; border: 1px solid rgba(255,255,255,0.08); font-family: var(--mono); }
+    .data-row strong { color: var(--accent); }
+  </style>
   <script>
     const bootstrap = JSON.parse(document.getElementById('bootstrap').textContent);
     const $ = (id) => document.getElementById(id);
@@ -432,7 +436,7 @@ HTML_TEMPLATE = r"""<!doctype html>
     let connectionState = 'syncing';
     let lastSyncAt = null;
 
-    function showTab(tabId) {
+    async function showTab(tabId) {
       document.getElementById('dashboard-tab').style.display = 'none';
       document.querySelectorAll('.tab-content').forEach(el => el.style.display = 'none');
       
@@ -443,6 +447,31 @@ HTML_TEMPLATE = r"""<!doctype html>
         document.getElementById('dashboard-tab').style.display = 'grid';
       } else {
         document.getElementById(tabId + '-tab').style.display = 'block';
+        await loadTabData(tabId);
+      }
+    }
+    
+    async function loadTabData(tabId) {
+      const container = document.getElementById(tabId + '-data');
+      if (!container) return;
+      container.innerHTML = '<div style="text-align:center; color:#888;">Loading data...</div>';
+      try {
+        const res = await fetch('/api/' + tabId);
+        const data = await res.json();
+        container.innerHTML = '';
+        if(tabId === 'helpdesk') {
+          data.messages.forEach(m => container.innerHTML += `<div class="data-row"><strong>${m.sender}:</strong> ${m.message} <em>(${m.status})</em></div>`);
+        } else if(tabId === 'automations') {
+          data.flows.forEach(f => container.innerHTML += `<div class="data-row"><strong>${f.name}</strong> - Trigger: ${f.trigger}</div>`);
+        } else if(tabId === 'analytics') {
+          data.metrics.forEach(a => container.innerHTML += `<div class="data-row"><strong>${a.date}</strong> - Visitors: ${a.visitors}, CSAT: ${a.csat}</div>`);
+        } else if(tabId === 'broadcast') {
+          data.campaigns.forEach(b => container.innerHTML += `<div class="data-row"><strong>${b.campaign_name}</strong> - Segment: ${b.target_segment} (${b.status})</div>`);
+        } else if(tabId === 'aiagent') {
+          container.innerHTML = `<div class="data-row"><strong>Language:</strong> ${data.config.language} | <strong>Mode:</strong> ${data.config.mode}</div>`;
+        }
+      } catch (e) {
+        container.innerHTML = `<div style="color:red;">Error loading ${tabId} data</div>`;
       }
     }
 
