@@ -164,7 +164,7 @@ class CountdownModel:
             "slot_count": len(self.slots),
             "next_switch_label": time.strftime("%H:%M:%S", time.localtime(next_switch_at)),
             "usage_mode": "local-rotation-only",
-            "usage_note": "Provider quota telemetry is not collected by ggtmoni.",
+            "usage_note": "Provider quota telemetry is not collected by autoc.",
             "slots": [
                 {
                     "slot": slot.slot,

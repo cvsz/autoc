@@ -110,9 +110,9 @@ class MonitorCoreTests(unittest.TestCase):
 
     def test_default_env_path_uses_exe_dir_when_frozen(self) -> None:
         with patch.object(monitor_core.sys, "frozen", True, create=True), patch.object(
-            monitor_core.sys, "executable", "/opt/ggtmoni/ggtmoni.exe"
+            monitor_core.sys, "executable", "/opt/autoc/autoc.exe"
         ):
-            self.assertEqual(Path("/opt/ggtmoni/.env"), monitor_core.default_env_path())
+            self.assertEqual(Path("/opt/autoc/.env"), monitor_core.default_env_path())
 
     def test_default_env_path_uses_cwd_when_not_frozen(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:

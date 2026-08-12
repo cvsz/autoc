@@ -1,6 +1,6 @@
-# Contributing to ggtmoni
+# Contributing to autoc
 
-Thanks for improving ggtmoni. Keep changes small, explain the operational
+Thanks for improving autoc. Keep changes small, explain the operational
 impact, and include tests or documentation for user-visible behavior.
 
 ## Local setup

@@ -298,7 +298,7 @@ HTML_TEMPLATE = r"""<!doctype html>
   <div class="shell">
     <main class="card" id="card">
       <div class="topbar">
-        <div class="brand"><span class="brand-mark">G</span><span><strong>ggtmoni</strong><small>rotation control room</small></span></div>
+        <div class="brand"><span class="brand-mark">G</span><span><strong>autoc</strong><small>rotation control room</small></span></div>
         <div class="header-actions">
           <div class="badge connection-badge syncing" id="status-badge" aria-live="polite"><span class="dot"></span><span id="status-text">connecting</span></div>
           <button class="icon-button" id="refresh-button" type="button" title="Refresh state (R)">↻ Refresh</button>
@@ -451,7 +451,7 @@ HTML_TEMPLATE = r"""<!doctype html>
       progressFill.style.width = `${progress.toFixed(2)}%`;
       $('clock-label').textContent = new Date(now).toLocaleTimeString([], {hour: '2-digit', minute: '2-digit', second: '2-digit'});
       $('last-sync').textContent = lastSyncAt ? `${Math.max(0, Math.round((now - lastSyncAt) / 1000))}s ago` : 'waiting';
-      document.title = `${fmt(remainingMs)} · ggtmoni`;
+      document.title = `${fmt(remainingMs)} · autoc`;
       requestAnimationFrame(tick);
     }
 
@@ -479,11 +479,11 @@ HTML_TEMPLATE = r"""<!doctype html>
     function toggleTheme() {
       const next = document.body.dataset.theme === 'light' ? 'dark' : 'light';
       document.body.dataset.theme = next;
-      localStorage.setItem('ggtmoni-theme', next);
+      localStorage.setItem('autoc-theme', next);
       $('theme-toggle').textContent = next === 'light' ? '☾ Dark' : '☼ Theme';
     }
 
-    const savedTheme = localStorage.getItem('ggtmoni-theme');
+    const savedTheme = localStorage.getItem('autoc-theme');
     if (savedTheme === 'light' || savedTheme === 'dark') document.body.dataset.theme = savedTheme;
     $('theme-toggle').textContent = document.body.dataset.theme === 'light' ? '☾ Dark' : '☼ Theme';
     $('theme-toggle').addEventListener('click', toggleTheme);

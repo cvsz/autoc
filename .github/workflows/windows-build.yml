@@ -43,27 +43,27 @@ jobs:
       - name: Smoke test packaged EXE
         shell: pwsh
         run: |
-          if (-not (Test-Path dist\windows\ggtmoni-gui.exe)) {
-            throw "Missing dist\\windows\\ggtmoni-gui.exe"
+          if (-not (Test-Path dist\windows\autoc-gui.exe)) {
+            throw "Missing dist\\windows\\autoc-gui.exe"
           }
           if (-not (Test-Path dist\windows\.env.example)) {
             throw "Missing dist\\windows\\.env.example"
           }
-          & dist\windows\ggtmoni-gui.exe --help | Out-Host
+          & dist\windows\autoc-gui.exe --help | Out-Host
 
       - name: Verify standalone zip
         shell: pwsh
         run: |
-          $zipPath = "dist\ggtmoni-windows11-gui.zip"
+          $zipPath = "dist\autoc-windows11-gui.zip"
           if (Test-Path $zipPath) {
             Write-Host "Found $zipPath"
           } else {
-            throw "Missing dist\\ggtmoni-windows11-gui.zip"
+            throw "Missing dist\\autoc-windows11-gui.zip"
           }
 
       - name: Upload artifact
         uses: actions/upload-artifact@v7
         with:
-          name: ggtmoni-windows11-gui-zip
-          path: dist/ggtmoni-windows11-gui.zip
+          name: autoc-windows11-gui-zip
+          path: dist/autoc-windows11-gui.zip
           if-no-files-found: error

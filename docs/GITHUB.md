@@ -1,6 +1,6 @@
 # GitHub configuration
 
-Repository: <https://github.com/cvsz/ggtmoni>
+Repository: <https://github.com/cvsz/autoc>
 
 ## Actions workflows
 

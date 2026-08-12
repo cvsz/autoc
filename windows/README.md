@@ -1,4 +1,4 @@
-# ggtmoni Windows 11 standalone GUI build
+# autoc Windows 11 standalone GUI build
 
 This folder contains the PyInstaller packaging for the realtime monitor GUI.
 
@@ -14,9 +14,9 @@ powershell -ExecutionPolicy Bypass -File windows\build_gui.ps1
 
 Output:
 
-- `dist\windows\ggtmoni-gui.exe`
+- `dist\windows\autoc-gui.exe`
 - `dist\windows\.env.example`
-- `dist\ggtmoni-windows11-gui.zip`
+- `dist\autoc-windows11-gui.zip`
 
 Runtime:
 
@@ -25,10 +25,10 @@ Runtime:
   from the `.env` file beside the executable.
 - Keep the extracted directory private because the application needs to read
   the raw local `.env` file.
-- Tagged releases (`v*`) publish `dist\ggtmoni-windows11-gui.zip` as a
+- Tagged releases (`v*`) publish `dist\autoc-windows11-gui.zip` as a
   GitHub release asset.
 
 The automated workflow also checks that the EXE, `.env.example`, and zip are
-present and runs `ggtmoni-gui.exe --help` as a smoke test. See
+present and runs `autoc-gui.exe --help` as a smoke test. See
 [the main usage guide](../docs/USAGE.md) and [release operations](../docs/OPERATIONS.md)
 for configuration and distribution guidance.

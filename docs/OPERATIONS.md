@@ -5,7 +5,7 @@
 Run the web dashboard from a virtual environment:
 
 ```bash
-cd /path/to/ggtmoni
+cd /path/to/autoc
 .venv/bin/python app.py --env /secure/path/.env --host 127.0.0.1 --port 8000
 ```
 
