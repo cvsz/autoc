@@ -14,6 +14,8 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from typing import Dict, Iterable, List, Optional
 from urllib.parse import urlparse
+import base64
+import ssl
 
 from monitor_core import ReloadingCountdownModel, default_env_path
 
@@ -529,6 +531,7 @@ class Handler(BaseHTTPRequestHandler):
         self.send_header("X-Content-Type-Options", "nosniff")
         self.send_header("Referrer-Policy", "no-referrer")
         self.send_header("X-Frame-Options", "SAMEORIGIN")
+        self.send_header("Content-Security-Policy", "default-src 'self' 'unsafe-inline' data:; connect-src 'self';")
         self.end_headers()
         self.wfile.write(body)
 
@@ -537,6 +540,16 @@ class Handler(BaseHTTPRequestHandler):
         self._send(HTTPStatus.OK, "application/json; charset=utf-8", body)
 
     def do_GET(self) -> None:  # noqa: N802
+        expected_auth = os.getenv("DASHBOARD_AUTH")
+        if expected_auth:
+            auth = self.headers.get("Authorization")
+            expected_basic = "Basic " + base64.b64encode(expected_auth.encode()).decode()
+            if auth != expected_basic:
+                self.send_response(HTTPStatus.UNAUTHORIZED)
+                self.send_header("WWW-Authenticate", 'Basic realm="autoc dashboard"')
+                self.end_headers()
+                return
+
         parsed = urlparse(self.path)
         if parsed.path == "/":
             snapshot = self.server.model.snapshot()
@@ -609,8 +622,8 @@ def build_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument(
         "--host",
-        default=os.getenv("HOST", "0.0.0.0"),
-        help="Bind host. Defaults to 0.0.0.0 or HOST.",
+        default=os.getenv("HOST", "127.0.0.1"),
+        help="Bind host. Defaults to 127.0.0.1 or HOST.",
     )
     parser.add_argument(
         "--port",
@@ -634,6 +647,16 @@ def start_web_dashboard(host: str, port: int, model: ReloadingCountdownModel) ->
             server = MonitorServer((host, candidate), Handler, model)
             if candidate != port:
                 print(f"Port {port} was busy; using {candidate} instead.", file=sys.stderr)
+            
+            if os.getenv("ENABLE_HTTPS") == "1":
+                certfile = os.getenv("HTTPS_CERT", "cert.pem")
+                keyfile = os.getenv("HTTPS_KEY", "key.pem")
+                if os.path.exists(certfile) and os.path.exists(keyfile):
+                    context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
+                    context.load_cert_chain(certfile=certfile, keyfile=keyfile)
+                    server.socket = context.wrap_socket(server.socket, server_side=True)
+                else:
+                    print("HTTPS enabled but cert.pem/key.pem not found. Falling back to HTTP.", file=sys.stderr)
             return server
         except OSError as exc:
             if exc.errno not in {98, 48}:
