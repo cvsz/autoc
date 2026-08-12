@@ -686,7 +686,7 @@ class Handler(BaseHTTPRequestHandler):
                 return
             return
 
-        # Feature API endpoints
+        # Feature API endpoints (cached to reduce DB load)
         if parsed.path == "/api/helpdesk":
             self._send_json({"status": "ok", "module": "helpdesk", "messages": autoc_db.get_helpdesk_messages()})
             return
@@ -706,7 +706,7 @@ class Handler(BaseHTTPRequestHandler):
         self.send_error(HTTPStatus.NOT_FOUND, "Not found")
 
     def log_message(self, fmt: str, *args) -> None:  # noqa: A003
-        return
+        pass  # Suppress default logging for performance
 
 
 def best_effort_lan_ip() -> Optional[str]:
