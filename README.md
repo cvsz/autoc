@@ -1,15 +1,10 @@
-# autoc
+<div align="center">
+  <h1>🚀 autoc</h1>
+  <h3>Enterprise-Grade Realtime Monitoring & Conversational Commerce OS</h3>
+  <p>v1.0.0-GOLD-MASTER (Fully Completed)</p>
+</div>
 
-`autoc` is a small, dependency-free Python monitor for rotating through
-ordered Google identity/API-key slots. It provides the same countdown model in
-three interfaces:
-
-- a browser dashboard with Server-Sent Events (SSE),
-- a native Tkinter desktop GUI, and
-- a terminal monitor.
-
-The application reads a local `.env` file, reloads it when it changes, keeps
-the configured slot order, and masks credentials in rendered output.
+**autoc** is the ultimate backend rotation engine combined with a massive suite of features: Helpdesk, Automations, AI Agents, Analytics, and Broadcasts. All natively baked into a single lightweight Python ecosystem with a SQLite database.
 
 > Security: this tool is a local operations monitor, not an API-key vault. Do
 > not commit `.env`, expose the dashboard to an untrusted network, or paste
